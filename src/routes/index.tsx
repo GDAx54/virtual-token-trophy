@@ -42,7 +42,7 @@ function HomePage() {
   const placeBet = async (p: { marketId: string; odds: number; label: string; stake: number }) => {
     if (!user) return;
     const { error } = await supabase.rpc("place_bet", {
-      _league_id: null,
+      _league_id: null as unknown as string,
       _market_ids: [p.marketId],
       _stake: p.stake,
     });
