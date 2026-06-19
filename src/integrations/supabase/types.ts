@@ -329,6 +329,19 @@ export type Database = {
         Args: { _league_id: string; _market_ids: string[]; _stake: number }
         Returns: string
       }
+      settle_match: { Args: { _match_id: string }; Returns: number }
+      upsert_match: {
+        Args: {
+          _away: Json
+          _home: Json
+          _id: string
+          _kickoff: string
+          _score: Json
+          _status: Database["public"]["Enums"]["match_status"]
+          _tournament: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "user" | "admin"
