@@ -14,6 +14,8 @@ import { Route as LeaguesRouteImport } from './routes/leagues'
 import { Route as BetsRouteImport } from './routes/bets'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicCronSyncMatchesRouteImport } from './routes/api/public/cron/sync-matches'
+import { Route as ApiPublicCronResolveBetsRouteImport } from './routes/api/public/cron/resolve-bets'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -40,6 +42,18 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCronSyncMatchesRoute =
+  ApiPublicCronSyncMatchesRouteImport.update({
+    id: '/api/public/cron/sync-matches',
+    path: '/api/public/cron/sync-matches',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicCronResolveBetsRoute =
+  ApiPublicCronResolveBetsRouteImport.update({
+    id: '/api/public/cron/resolve-bets',
+    path: '/api/public/cron/resolve-bets',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +61,8 @@ export interface FileRoutesByFullPath {
   '/bets': typeof BetsRoute
   '/leagues': typeof LeaguesRoute
   '/profile': typeof ProfileRoute
+  '/api/public/cron/resolve-bets': typeof ApiPublicCronResolveBetsRoute
+  '/api/public/cron/sync-matches': typeof ApiPublicCronSyncMatchesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +70,8 @@ export interface FileRoutesByTo {
   '/bets': typeof BetsRoute
   '/leagues': typeof LeaguesRoute
   '/profile': typeof ProfileRoute
+  '/api/public/cron/resolve-bets': typeof ApiPublicCronResolveBetsRoute
+  '/api/public/cron/sync-matches': typeof ApiPublicCronSyncMatchesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +80,37 @@ export interface FileRoutesById {
   '/bets': typeof BetsRoute
   '/leagues': typeof LeaguesRoute
   '/profile': typeof ProfileRoute
+  '/api/public/cron/resolve-bets': typeof ApiPublicCronResolveBetsRoute
+  '/api/public/cron/sync-matches': typeof ApiPublicCronSyncMatchesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/bets' | '/leagues' | '/profile'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/bets'
+    | '/leagues'
+    | '/profile'
+    | '/api/public/cron/resolve-bets'
+    | '/api/public/cron/sync-matches'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/bets' | '/leagues' | '/profile'
-  id: '__root__' | '/' | '/auth' | '/bets' | '/leagues' | '/profile'
+  to:
+    | '/'
+    | '/auth'
+    | '/bets'
+    | '/leagues'
+    | '/profile'
+    | '/api/public/cron/resolve-bets'
+    | '/api/public/cron/sync-matches'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/bets'
+    | '/leagues'
+    | '/profile'
+    | '/api/public/cron/resolve-bets'
+    | '/api/public/cron/sync-matches'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +119,8 @@ export interface RootRouteChildren {
   BetsRoute: typeof BetsRoute
   LeaguesRoute: typeof LeaguesRoute
   ProfileRoute: typeof ProfileRoute
+  ApiPublicCronResolveBetsRoute: typeof ApiPublicCronResolveBetsRoute
+  ApiPublicCronSyncMatchesRoute: typeof ApiPublicCronSyncMatchesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +160,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cron/sync-matches': {
+      id: '/api/public/cron/sync-matches'
+      path: '/api/public/cron/sync-matches'
+      fullPath: '/api/public/cron/sync-matches'
+      preLoaderRoute: typeof ApiPublicCronSyncMatchesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/cron/resolve-bets': {
+      id: '/api/public/cron/resolve-bets'
+      path: '/api/public/cron/resolve-bets'
+      fullPath: '/api/public/cron/resolve-bets'
+      preLoaderRoute: typeof ApiPublicCronResolveBetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,17 +183,9 @@ const rootRouteChildren: RootRouteChildren = {
   BetsRoute: BetsRoute,
   LeaguesRoute: LeaguesRoute,
   ProfileRoute: ProfileRoute,
+  ApiPublicCronResolveBetsRoute: ApiPublicCronResolveBetsRoute,
+  ApiPublicCronSyncMatchesRoute: ApiPublicCronSyncMatchesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
