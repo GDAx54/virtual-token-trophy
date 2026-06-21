@@ -56,11 +56,7 @@ function ProfilePage() {
           </div>
           <h1 className="mt-3 text-xl font-bold">{profile?.display_name || profile?.username || "—"}</h1>
           <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">@{profile?.username}</p>
-          <div className="mt-4 flex items-center justify-center gap-2 rounded-full border border-neon/30 bg-neon/10 px-4 py-2">
-            <Coins className="h-4 w-4 text-neon" />
-            <span className="font-mono text-lg font-bold tabular-nums text-neon">{profile?.bankroll?.toLocaleString() ?? "—"}</span>
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">tkn disponibles</span>
-          </div>
+          <p className="mt-3 text-xs text-muted-foreground">Tu saldo se gestiona por liga. Cámbiala desde la pestaña Ligas.</p>
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-3">
