@@ -106,14 +106,14 @@ function BetRowCard({ bet }: { bet: BetRow }) {
       <footer className="mt-3 flex items-end justify-between border-t border-border/50 pt-3">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Stake</div>
-          <div className="font-mono text-sm font-bold">{bet.stake.toLocaleString()} tkn</div>
+          <div className="font-mono text-sm font-bold">{bet.stake.toLocaleString()} €</div>
         </div>
         <div className="text-right">
           <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             {bet.status === "won" ? "Pago" : "Pago potencial"}
           </div>
           <div className="font-mono text-base font-bold text-neon">
-            {(bet.status === "won" ? bet.payout : bet.potential_payout).toLocaleString()} tkn
+            {(bet.status === "won" ? bet.payout : bet.potential_payout).toLocaleString()} €
           </div>
         </div>
       </footer>

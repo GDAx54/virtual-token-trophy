@@ -164,7 +164,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
               className="w-24 rounded-md border border-border bg-background/80 px-2 py-1.5 font-mono text-sm outline-none focus:border-neon"
             />
             <span className="text-xs text-muted-foreground">
-              Retorno: <span className="font-mono text-foreground">{potentialPayout(stake, selected.odds).toLocaleString()}</span> tkn
+              Retorno: <span className="font-mono text-foreground">{potentialPayout(stake, selected.odds).toLocaleString()}</span> €
             </span>
             <button
               onClick={confirm}

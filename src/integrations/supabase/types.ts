@@ -325,6 +325,7 @@ export type Database = {
         Args: { _league: string; _user: string }
         Returns: boolean
       }
+      join_league_by_code: { Args: { _code: string }; Returns: string }
       place_bet: {
         Args: { _league_id: string; _market_ids: string[]; _stake: number }
         Returns: string

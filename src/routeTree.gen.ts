@@ -14,6 +14,8 @@ import { Route as LeaguesRouteImport } from './routes/leagues'
 import { Route as BetsRouteImport } from './routes/bets'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LeaguesLeagueIdRouteImport } from './routes/leagues.$leagueId'
+import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as ApiPublicCronSyncMatchesRouteImport } from './routes/api/public/cron/sync-matches'
 import { Route as ApiPublicCronResolveBetsRouteImport } from './routes/api/public/cron/resolve-bets'
 
@@ -42,6 +44,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LeaguesLeagueIdRoute = LeaguesLeagueIdRouteImport.update({
+  id: '/$leagueId',
+  path: '/$leagueId',
+  getParentRoute: () => LeaguesRoute,
+} as any)
+const JoinCodeRoute = JoinCodeRouteImport.update({
+  id: '/join/$code',
+  path: '/join/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCronSyncMatchesRoute =
   ApiPublicCronSyncMatchesRouteImport.update({
     id: '/api/public/cron/sync-matches',
@@ -59,8 +71,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/bets': typeof BetsRoute
-  '/leagues': typeof LeaguesRoute
+  '/leagues': typeof LeaguesRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/join/$code': typeof JoinCodeRoute
+  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
   '/api/public/cron/resolve-bets': typeof ApiPublicCronResolveBetsRoute
   '/api/public/cron/sync-matches': typeof ApiPublicCronSyncMatchesRoute
 }
@@ -68,8 +82,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/bets': typeof BetsRoute
-  '/leagues': typeof LeaguesRoute
+  '/leagues': typeof LeaguesRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/join/$code': typeof JoinCodeRoute
+  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
   '/api/public/cron/resolve-bets': typeof ApiPublicCronResolveBetsRoute
   '/api/public/cron/sync-matches': typeof ApiPublicCronSyncMatchesRoute
 }
@@ -78,8 +94,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/bets': typeof BetsRoute
-  '/leagues': typeof LeaguesRoute
+  '/leagues': typeof LeaguesRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/join/$code': typeof JoinCodeRoute
+  '/leagues/$leagueId': typeof LeaguesLeagueIdRoute
   '/api/public/cron/resolve-bets': typeof ApiPublicCronResolveBetsRoute
   '/api/public/cron/sync-matches': typeof ApiPublicCronSyncMatchesRoute
 }
@@ -91,6 +109,8 @@ export interface FileRouteTypes {
     | '/bets'
     | '/leagues'
     | '/profile'
+    | '/join/$code'
+    | '/leagues/$leagueId'
     | '/api/public/cron/resolve-bets'
     | '/api/public/cron/sync-matches'
   fileRoutesByTo: FileRoutesByTo
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
     | '/bets'
     | '/leagues'
     | '/profile'
+    | '/join/$code'
+    | '/leagues/$leagueId'
     | '/api/public/cron/resolve-bets'
     | '/api/public/cron/sync-matches'
   id:
@@ -109,6 +131,8 @@ export interface FileRouteTypes {
     | '/bets'
     | '/leagues'
     | '/profile'
+    | '/join/$code'
+    | '/leagues/$leagueId'
     | '/api/public/cron/resolve-bets'
     | '/api/public/cron/sync-matches'
   fileRoutesById: FileRoutesById
@@ -117,8 +141,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   BetsRoute: typeof BetsRoute
-  LeaguesRoute: typeof LeaguesRoute
+  LeaguesRoute: typeof LeaguesRouteWithChildren
   ProfileRoute: typeof ProfileRoute
+  JoinCodeRoute: typeof JoinCodeRoute
   ApiPublicCronResolveBetsRoute: typeof ApiPublicCronResolveBetsRoute
   ApiPublicCronSyncMatchesRoute: typeof ApiPublicCronSyncMatchesRoute
 }
@@ -160,6 +185,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/leagues/$leagueId': {
+      id: '/leagues/$leagueId'
+      path: '/$leagueId'
+      fullPath: '/leagues/$leagueId'
+      preLoaderRoute: typeof LeaguesLeagueIdRouteImport
+      parentRoute: typeof LeaguesRoute
+    }
+    '/join/$code': {
+      id: '/join/$code'
+      path: '/join/$code'
+      fullPath: '/join/$code'
+      preLoaderRoute: typeof JoinCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cron/sync-matches': {
       id: '/api/public/cron/sync-matches'
       path: '/api/public/cron/sync-matches'
@@ -177,12 +216,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface LeaguesRouteChildren {
+  LeaguesLeagueIdRoute: typeof LeaguesLeagueIdRoute
+}
+
+const LeaguesRouteChildren: LeaguesRouteChildren = {
+  LeaguesLeagueIdRoute: LeaguesLeagueIdRoute,
+}
+
+const LeaguesRouteWithChildren =
+  LeaguesRoute._addFileChildren(LeaguesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   BetsRoute: BetsRoute,
-  LeaguesRoute: LeaguesRoute,
+  LeaguesRoute: LeaguesRouteWithChildren,
   ProfileRoute: ProfileRoute,
+  JoinCodeRoute: JoinCodeRoute,
   ApiPublicCronResolveBetsRoute: ApiPublicCronResolveBetsRoute,
   ApiPublicCronSyncMatchesRoute: ApiPublicCronSyncMatchesRoute,
 }
