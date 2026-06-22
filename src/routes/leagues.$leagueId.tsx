@@ -120,12 +120,12 @@ function LeagueDetailPage() {
 
         {league && (
           <div className="mb-4 rounded-xl border border-border bg-card/60 p-3">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Enlace de invitación</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Enlace de invitación</div>
             <button
               onClick={share}
               className="mt-1 flex w-full items-center justify-between gap-2 rounded-md border border-border bg-background/60 px-3 py-2 text-left text-xs"
             >
-              <span className="truncate font-mono text-muted-foreground">{inviteUrl}</span>
+              <span className="truncate text-muted-foreground">{inviteUrl}</span>
               <Copy className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
             </button>
           </div>
