@@ -31,8 +31,9 @@
   --color-neon: var(--neon);
   --color-neon-foreground: var(--neon-foreground);
   --color-magenta: var(--magenta);
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
 }
 
 :root {
@@ -69,14 +70,43 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { color-scheme: dark; }
+  html {
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-display);
+    font-feature-settings: "ss01", "cv11", "cv02";
+    letter-spacing: -0.011em;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.72 0.28 330 / 0.12), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.85 0.22 145 / 0.10), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.72 0.28 330 / 0.14), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.85 0.22 145 / 0.12), transparent);
     min-height: 100vh;
   }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+  /* Fluid type scale */
+  h1 { font-size: clamp(1.875rem, 1.4rem + 2.4vw, 3rem); line-height: 1.05; }
+  h2 { font-size: clamp(1.5rem, 1.2rem + 1.6vw, 2.25rem); line-height: 1.1; }
+  h3 { font-size: clamp(1.125rem, 1rem + 0.8vw, 1.5rem); line-height: 1.2; }
+  code, pre, .font-mono { font-family: var(--font-mono); font-feature-settings: "zero", "ss01"; }
+  ::selection { background: oklch(0.85 0.22 145 / 0.25); color: var(--color-foreground); }
+  /* Smooth scroll + reduced motion fallback */
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  /* Sleek scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: oklch(1 0 0 / 0.08); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: oklch(1 0 0 / 0.16); }
+  button, a { transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
 }
