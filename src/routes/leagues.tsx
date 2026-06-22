@@ -176,15 +176,15 @@ function CreateLeagueForm({ onDone }: { onDone: (id: string) => void }) {
 
   return (
     <div className="rounded-2xl border border-neon/30 bg-card/60 p-4">
-      <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Nombre</label>
+      <label className="text-[10px] uppercase tracking-widest text-muted-foreground">Nombre</label>
       <input
         value={name} onChange={(e) => setName(e.target.value)} placeholder="Liga de los colegas"
         className="mt-1 w-full rounded-md border border-border bg-background/80 px-3 py-2 text-sm outline-none focus:border-neon"
       />
-      <label className="mt-3 block font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Saldo inicial por miembro (€)</label>
+      <label className="mt-3 block text-[10px] uppercase tracking-widest text-muted-foreground">Saldo inicial por miembro (€)</label>
       <input
         type="number" min={100} value={stake} onChange={(e) => setStake(Math.max(100, Number(e.target.value) || 0))}
-        className="mt-1 w-32 rounded-md border border-border bg-background/80 px-3 py-2 font-mono text-sm outline-none focus:border-neon"
+        className="mt-1 w-32 rounded-md border border-border bg-background/80 px-3 py-2 text-sm outline-none focus:border-neon"
       />
       <button onClick={submit} disabled={busy || !name.trim()}
         className="mt-3 w-full rounded-lg bg-neon px-3 py-2 text-sm font-bold text-neon-foreground shadow-[var(--shadow-glow)] disabled:opacity-50">
@@ -208,11 +208,11 @@ function JoinLeagueForm({ onDone }: { onDone: (id: string) => void }) {
   };
   return (
     <div className="rounded-2xl border border-border bg-card/60 p-4">
-      <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Código de invitación</label>
+      <label className="text-[10px] uppercase tracking-widest text-muted-foreground">Código de invitación</label>
       <div className="mt-1 flex gap-2">
         <input
           value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="ABC123" maxLength={12}
-          className="flex-1 rounded-md border border-border bg-background/80 px-3 py-2 font-mono uppercase tracking-widest outline-none focus:border-neon"
+          className="flex-1 rounded-md border border-border bg-background/80 px-3 py-2 uppercase tracking-widest outline-none focus:border-neon"
         />
         <button onClick={submit} disabled={busy || !code.trim()}
           className="rounded-md bg-foreground px-4 text-sm font-bold text-background disabled:opacity-50">
