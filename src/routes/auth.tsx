@@ -145,7 +145,7 @@ function AuthPage() {
       </div>
 
       <p className="mt-6 max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground">
-        100% diversión, 0% dinero real. Todas las apuestas son con tokens virtuales sin valor monetario.
+        100% diversión, 0% dinero real. Todas las apuestas son con euros virtuales sin valor monetario.
       </p>
     </div>
   );
