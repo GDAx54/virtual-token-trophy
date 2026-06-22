@@ -27,7 +27,7 @@ export function combinedOdds(legs: BetLeg[]): number {
 
 /**
  * Potential payout (stake + profit) for a given stake and decimal odds.
- * Example: 100 tokens @ 2.50 → 250 payout (150 profit).
+ * Example: 100 € @ 2.50 → 250 payout (150 profit).
  */
 export function potentialPayout(stake: number, odds: number): number {
   if (stake <= 0 || odds <= 1) return 0;
