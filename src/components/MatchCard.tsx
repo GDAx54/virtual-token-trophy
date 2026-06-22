@@ -184,7 +184,7 @@ function Team({ team, align }: { team: { name: string; short?: string }; align: 
   const abbr = (team.short ?? team.name ?? "?").slice(0, 3).toUpperCase();
   return (
     <div className={cn("flex items-center gap-2", align === "right" && "flex-row-reverse text-right")}>
-      <div className="grid h-10 w-10 place-items-center rounded-full bg-muted font-mono text-xs font-bold ring-1 ring-border">
+      <div className="grid h-10 w-10 place-items-center rounded-full bg-muted text-xs font-bold ring-1 ring-border">
         {abbr}
       </div>
       <div className="min-w-0">
@@ -210,8 +210,8 @@ function Odds({ label, market, active, onClick, compact }: {
           : "border-border bg-background/40 hover:border-neon/40 hover:bg-background/70",
       )}
     >
-      <span className={cn("font-mono text-muted-foreground", !compact && "text-xs uppercase")}>{label}</span>
-      <span className={cn("font-mono font-bold tabular-nums", compact ? "text-foreground" : "text-base")}>
+      <span className={cn("text-muted-foreground", !compact && "text-xs uppercase")}>{label}</span>
+      <span className={cn("font-bold", compact ? "text-foreground" : "text-base")}>
         {odds ? odds.toFixed(2) : "—"}
       </span>
     </button>
