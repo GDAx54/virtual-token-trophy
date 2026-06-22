@@ -89,7 +89,7 @@ function LeaguesPage() {
         {showCreate && <CreateLeagueForm onDone={(id) => { setShowCreate(false); setLeague(id); load(); }} />}
         {showJoin && <JoinLeagueForm onDone={(id) => { setShowJoin(false); setLeague(id); load(); navigate({ to: "/leagues/$leagueId", params: { leagueId: id } }); }} />}
 
-        <h2 className="mt-6 mb-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        <h2 className="mt-6 mb-3 text-xs uppercase tracking-widest text-muted-foreground">
           Tus ligas
         </h2>
 
@@ -131,16 +131,16 @@ function LeaguesPage() {
                   >
                     <div className="flex items-center gap-2">
                       <div className="truncate text-base font-semibold">{l.name}</div>
-                      {active && <span className="rounded-full bg-neon/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-neon">activa</span>}
+                      {active && <span className="rounded-full bg-neon/15 px-2 py-0.5 text-[9px] uppercase tracking-widest text-neon">activa</span>}
                     </div>
-                    <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-muted-foreground">
                       <span>{l.members} {l.members === 1 ? "miembro" : "miembros"}</span>
                       <span>·</span>
                       <span>código {l.invite_code}</span>
                     </div>
                   </Link>
                   <div className="text-right">
-                    <div className="font-mono text-lg font-bold tabular-nums text-neon">{l.bankroll.toLocaleString()} €</div>
+                    <div className="text-lg font-bold text-neon">{l.bankroll.toLocaleString()} €</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </div>
