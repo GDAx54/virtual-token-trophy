@@ -133,7 +133,7 @@ function LeagueDetailPage() {
 
         <div className="mb-3 flex items-center gap-2">
           <Trophy className="h-5 w-5 text-neon" />
-          <h2 className="font-mono text-sm uppercase tracking-widest">Clasificación</h2>
+          <h2 className="text-sm uppercase tracking-widest">Clasificación</h2>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-border bg-card" style={{ backgroundImage: "var(--gradient-card)" }}>
