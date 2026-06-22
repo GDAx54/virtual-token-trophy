@@ -84,7 +84,7 @@ function Stat({ label, value, icon }: { label: string; value: string | number; i
         {icon}
         <span className="text-[10px] uppercase tracking-widest">{label}</span>
       </div>
-      <div className="mt-1 font-mono text-lg font-bold tabular-nums">{value}</div>
+      <div className="mt-1 text-lg font-bold">{value}</div>
     </div>
   );
 }
