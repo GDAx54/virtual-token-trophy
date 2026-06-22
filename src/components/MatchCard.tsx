@@ -102,11 +102,11 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
         <Team team={match.home_team} align="left" />
         <div className="text-center">
           {isLive || match.status === "finished" ? (
-            <div className="font-mono text-2xl font-bold">
+            <div className="text-2xl font-bold">
               {match.score?.home ?? 0}<span className="mx-1 text-muted-foreground">:</span>{match.score?.away ?? 0}
             </div>
           ) : (
-            <div className="font-mono text-sm text-muted-foreground">VS</div>
+            <div className="text-sm text-muted-foreground">VS</div>
           )}
         </div>
         <Team team={match.away_team} align="right" />
