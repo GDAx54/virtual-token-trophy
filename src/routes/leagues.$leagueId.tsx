@@ -97,7 +97,7 @@ function LeagueDetailPage() {
           </Link>
           <div className="min-w-0 flex-1">
             <div className="truncate text-base font-bold">{league?.name ?? "…"}</div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
               Código: <span className="text-foreground">{league?.invite_code ?? "—"}</span>
             </div>
           </div>
