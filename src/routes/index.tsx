@@ -79,7 +79,7 @@ function HomePage() {
           </div>
         )}
 
-        <h2 className="mb-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        <h2 className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">
           Partidos disponibles
         </h2>
         {loading ? (

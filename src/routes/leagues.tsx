@@ -89,7 +89,7 @@ function LeaguesPage() {
         {showCreate && <CreateLeagueForm onDone={(id) => { setShowCreate(false); setLeague(id); load(); }} />}
         {showJoin && <JoinLeagueForm onDone={(id) => { setShowJoin(false); setLeague(id); load(); navigate({ to: "/leagues/$leagueId", params: { leagueId: id } }); }} />}
 
-        <h2 className="mt-6 mb-3 font-mono text-xs uppercase tracking-widest text-muted-foreground">
+        <h2 className="mt-6 mb-3 text-xs uppercase tracking-widest text-muted-foreground">
           Tus ligas
         </h2>
 
@@ -131,16 +131,16 @@ function LeaguesPage() {
                   >
                     <div className="flex items-center gap-2">
                       <div className="truncate text-base font-semibold">{l.name}</div>
-                      {active && <span className="rounded-full bg-neon/15 px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest text-neon">activa</span>}
+                      {active && <span className="rounded-full bg-neon/15 px-2 py-0.5 text-[9px] uppercase tracking-widest text-neon">activa</span>}
                     </div>
-                    <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-muted-foreground">
                       <span>{l.members} {l.members === 1 ? "miembro" : "miembros"}</span>
                       <span>·</span>
                       <span>código {l.invite_code}</span>
                     </div>
                   </Link>
                   <div className="text-right">
-                    <div className="font-mono text-lg font-bold tabular-nums text-neon">{l.bankroll.toLocaleString()} €</div>
+                    <div className="text-lg font-bold text-neon">{l.bankroll.toLocaleString()} €</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
                 </div>
@@ -176,15 +176,15 @@ function CreateLeagueForm({ onDone }: { onDone: (id: string) => void }) {
 
   return (
     <div className="rounded-2xl border border-neon/30 bg-card/60 p-4">
-      <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Nombre</label>
+      <label className="text-[10px] uppercase tracking-widest text-muted-foreground">Nombre</label>
       <input
         value={name} onChange={(e) => setName(e.target.value)} placeholder="Liga de los colegas"
         className="mt-1 w-full rounded-md border border-border bg-background/80 px-3 py-2 text-sm outline-none focus:border-neon"
       />
-      <label className="mt-3 block font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Saldo inicial por miembro (€)</label>
+      <label className="mt-3 block text-[10px] uppercase tracking-widest text-muted-foreground">Saldo inicial por miembro (€)</label>
       <input
         type="number" min={100} value={stake} onChange={(e) => setStake(Math.max(100, Number(e.target.value) || 0))}
-        className="mt-1 w-32 rounded-md border border-border bg-background/80 px-3 py-2 font-mono text-sm outline-none focus:border-neon"
+        className="mt-1 w-32 rounded-md border border-border bg-background/80 px-3 py-2 text-sm outline-none focus:border-neon"
       />
       <button onClick={submit} disabled={busy || !name.trim()}
         className="mt-3 w-full rounded-lg bg-neon px-3 py-2 text-sm font-bold text-neon-foreground shadow-[var(--shadow-glow)] disabled:opacity-50">
@@ -208,11 +208,11 @@ function JoinLeagueForm({ onDone }: { onDone: (id: string) => void }) {
   };
   return (
     <div className="rounded-2xl border border-border bg-card/60 p-4">
-      <label className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Código de invitación</label>
+      <label className="text-[10px] uppercase tracking-widest text-muted-foreground">Código de invitación</label>
       <div className="mt-1 flex gap-2">
         <input
           value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="ABC123" maxLength={12}
-          className="flex-1 rounded-md border border-border bg-background/80 px-3 py-2 font-mono uppercase tracking-widest outline-none focus:border-neon"
+          className="flex-1 rounded-md border border-border bg-background/80 px-3 py-2 uppercase tracking-widest outline-none focus:border-neon"
         />
         <button onClick={submit} disabled={busy || !code.trim()}
           className="rounded-md bg-foreground px-4 text-sm font-bold text-background disabled:opacity-50">

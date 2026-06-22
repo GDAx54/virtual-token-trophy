@@ -12,7 +12,7 @@ export interface BetLeg {
 export interface Bet {
   id: string;
   userId: string;
-  stake: number;          // tokens wagered
+  stake: number;          // euros wagered
   legs: BetLeg[];         // 1 leg = single, >1 = parlay/combo
   status: BetStatus;
 }
@@ -27,7 +27,7 @@ export function combinedOdds(legs: BetLeg[]): number {
 
 /**
  * Potential payout (stake + profit) for a given stake and decimal odds.
- * Example: 100 tokens @ 2.50 → 250 payout (150 profit).
+ * Example: 100 € @ 2.50 → 250 payout (150 profit).
  */
 export function potentialPayout(stake: number, odds: number): number {
   if (stake <= 0 || odds <= 1) return 0;
@@ -39,7 +39,7 @@ export function potentialProfit(stake: number, odds: number): number {
 }
 
 /**
- * Resolve a bet given each leg's result. Returns the net token delta
+ * Resolve a bet given each leg's result. Returns the net euro delta
  * to credit/debit the user balance (positive = win, negative = loss).
  * Assumes the stake was already deducted at bet placement.
  */

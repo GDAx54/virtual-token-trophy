@@ -87,32 +87,32 @@ function BetRowCard({ bet }: { bet: BetRow }) {
   return (
     <article className={cn("rounded-2xl border bg-card p-4", tone)} style={{ backgroundImage: "var(--gradient-card)" }}>
       <header className="flex items-center justify-between">
-        <span className={cn("flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest", tone)}>
+        <span className={cn("flex items-center gap-1.5 text-[10px] uppercase tracking-widest", tone)}>
           <Icon className="h-3 w-3" />
           {bet.status === "pending" ? "Pendiente" : bet.status === "won" ? "Ganada" : bet.status === "lost" ? "Perdida" : "Anulada"}
         </span>
-        <span suppressHydrationWarning className="font-mono text-[10px] text-muted-foreground">{when}</span>
+        <span suppressHydrationWarning className="text-[10px] text-muted-foreground">{when}</span>
       </header>
 
       <div className="mt-2 space-y-1">
         {bet.bet_legs?.map((leg, i) => (
           <div key={i} className="flex items-baseline justify-between text-sm">
             <span className="truncate text-foreground">{leg.label}</span>
-            <span className="ml-2 font-mono text-xs text-muted-foreground">@ {Number(leg.odds).toFixed(2)}</span>
+            <span className="ml-2 text-xs text-muted-foreground">@ {Number(leg.odds).toFixed(2)}</span>
           </div>
         ))}
       </div>
 
       <footer className="mt-3 flex items-end justify-between border-t border-border/50 pt-3">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Stake</div>
-          <div className="font-mono text-sm font-bold">{bet.stake.toLocaleString()} €</div>
+          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Stake</div>
+          <div className="text-sm font-bold">{bet.stake.toLocaleString()} €</div>
         </div>
         <div className="text-right">
-          <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
             {bet.status === "won" ? "Pago" : "Pago potencial"}
           </div>
-          <div className="font-mono text-base font-bold text-neon">
+          <div className="text-base font-bold text-neon">
             {(bet.status === "won" ? bet.payout : bet.potential_payout).toLocaleString()} €
           </div>
         </div>

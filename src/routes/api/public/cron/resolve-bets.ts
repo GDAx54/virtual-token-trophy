@@ -1,4 +1,4 @@
-// Cron: liquida partidos finalizados → resuelve mercados, suma/resta tokens.
+// Cron: liquida partidos finalizados → resuelve mercados, suma/resta euros.
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/api/public/cron/resolve-bets")({

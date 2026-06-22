@@ -52,10 +52,10 @@ function ProfilePage() {
       <main className="mx-auto max-w-3xl px-5 pt-6">
         <div className="rounded-2xl border border-border bg-card p-6 text-center" style={{ backgroundImage: "var(--gradient-card)" }}>
           <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-neon text-neon-foreground shadow-[var(--shadow-glow)]">
-            <span className="font-mono text-xl font-bold">{(profile?.display_name ?? profile?.username ?? "?").slice(0, 2).toUpperCase()}</span>
+            <span className="text-xl font-bold">{(profile?.display_name ?? profile?.username ?? "?").slice(0, 2).toUpperCase()}</span>
           </div>
           <h1 className="mt-3 text-xl font-bold">{profile?.display_name || profile?.username || "—"}</h1>
-          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">@{profile?.username}</p>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">@{profile?.username}</p>
           <p className="mt-3 text-xs text-muted-foreground">Tu saldo se gestiona por liga. Cámbiala desde la pestaña Ligas.</p>
         </div>
 
@@ -84,7 +84,7 @@ function Stat({ label, value, icon }: { label: string; value: string | number; i
         {icon}
         <span className="text-[10px] uppercase tracking-widest">{label}</span>
       </div>
-      <div className="mt-1 font-mono text-lg font-bold tabular-nums">{value}</div>
+      <div className="mt-1 text-lg font-bold">{value}</div>
     </div>
   );
 }

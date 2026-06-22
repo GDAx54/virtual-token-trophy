@@ -78,7 +78,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
       style={{ backgroundImage: "var(--gradient-card)" }}
     >
       <header className="flex items-center justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span className="font-mono">Mundial · {match.status === "live" ? "EN VIVO" : "Próximo"}</span>
+        <span>Mundial · {match.status === "live" ? "EN VIVO" : "Próximo"}</span>
         <span className="flex items-center gap-2">
           {hot && (
             <span className="flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 text-accent">
@@ -86,12 +86,12 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
             </span>
           )}
           {isLive ? (
-            <span className="flex items-center gap-1 rounded-full bg-destructive/15 px-2 py-0.5 font-mono text-destructive">
+            <span className="flex items-center gap-1 rounded-full bg-destructive/15 px-2 py-0.5 text-destructive">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-destructive" />
               {match.score?.minute ?? 0}'
             </span>
           ) : (
-            <span className="flex items-center gap-1 font-mono">
+            <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" /> <span suppressHydrationWarning>{kickoff || "--:--"}</span>
             </span>
           )}
@@ -102,11 +102,11 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
         <Team team={match.home_team} align="left" />
         <div className="text-center">
           {isLive || match.status === "finished" ? (
-            <div className="font-mono text-2xl font-bold">
+            <div className="text-2xl font-bold">
               {match.score?.home ?? 0}<span className="mx-1 text-muted-foreground">:</span>{match.score?.away ?? 0}
             </div>
           ) : (
-            <div className="font-mono text-sm text-muted-foreground">VS</div>
+            <div className="text-sm text-muted-foreground">VS</div>
           )}
         </div>
         <Team team={match.away_team} align="right" />
@@ -135,7 +135,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
             <div className="mt-3 space-y-3">
               {groupBy(extras, (e) => e.category).map(([cat, items]) => (
                 <div key={cat}>
-                  <div className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{cat}</div>
+                  <div className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">{cat}</div>
                   <div className="grid grid-cols-2 gap-2">
                     {items.map((m) => (
                       <Odds key={m.id} label={m.label} market={m} compact active={selected?.id === m.id}
@@ -153,7 +153,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
         <div className="mt-4 rounded-xl border border-neon/30 bg-background/60 p-3">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">{selected.label}</span>
-            <span className="font-mono font-bold text-neon">@ {selected.odds.toFixed(2)}</span>
+            <span className="font-bold text-neon">@ {selected.odds.toFixed(2)}</span>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <input
@@ -161,10 +161,10 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
               min={1}
               value={stake}
               onChange={(e) => setStake(Math.max(1, Number(e.target.value) || 0))}
-              className="w-24 rounded-md border border-border bg-background/80 px-2 py-1.5 font-mono text-sm outline-none focus:border-neon"
+              className="w-24 rounded-md border border-border bg-background/80 px-2 py-1.5 text-sm outline-none focus:border-neon"
             />
             <span className="text-xs text-muted-foreground">
-              Retorno: <span className="font-mono text-foreground">{potentialPayout(stake, selected.odds).toLocaleString()}</span> €
+              Retorno: <span className="text-foreground">{potentialPayout(stake, selected.odds).toLocaleString()}</span> €
             </span>
             <button
               onClick={confirm}
@@ -184,7 +184,7 @@ function Team({ team, align }: { team: { name: string; short?: string }; align: 
   const abbr = (team.short ?? team.name ?? "?").slice(0, 3).toUpperCase();
   return (
     <div className={cn("flex items-center gap-2", align === "right" && "flex-row-reverse text-right")}>
-      <div className="grid h-10 w-10 place-items-center rounded-full bg-muted font-mono text-xs font-bold ring-1 ring-border">
+      <div className="grid h-10 w-10 place-items-center rounded-full bg-muted text-xs font-bold ring-1 ring-border">
         {abbr}
       </div>
       <div className="min-w-0">
@@ -210,8 +210,8 @@ function Odds({ label, market, active, onClick, compact }: {
           : "border-border bg-background/40 hover:border-neon/40 hover:bg-background/70",
       )}
     >
-      <span className={cn("font-mono text-muted-foreground", !compact && "text-xs uppercase")}>{label}</span>
-      <span className={cn("font-mono font-bold tabular-nums", compact ? "text-foreground" : "text-base")}>
+      <span className={cn("text-muted-foreground", !compact && "text-xs uppercase")}>{label}</span>
+      <span className={cn("font-bold", compact ? "text-foreground" : "text-base")}>
         {odds ? odds.toFixed(2) : "—"}
       </span>
     </button>

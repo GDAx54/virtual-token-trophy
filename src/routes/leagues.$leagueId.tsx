@@ -97,7 +97,7 @@ function LeagueDetailPage() {
           </Link>
           <div className="min-w-0 flex-1">
             <div className="truncate text-base font-bold">{league?.name ?? "…"}</div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
               Código: <span className="text-foreground">{league?.invite_code ?? "—"}</span>
             </div>
           </div>
@@ -120,12 +120,12 @@ function LeagueDetailPage() {
 
         {league && (
           <div className="mb-4 rounded-xl border border-border bg-card/60 p-3">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Enlace de invitación</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Enlace de invitación</div>
             <button
               onClick={share}
               className="mt-1 flex w-full items-center justify-between gap-2 rounded-md border border-border bg-background/60 px-3 py-2 text-left text-xs"
             >
-              <span className="truncate font-mono text-muted-foreground">{inviteUrl}</span>
+              <span className="truncate text-muted-foreground">{inviteUrl}</span>
               <Copy className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
             </button>
           </div>
@@ -133,7 +133,7 @@ function LeagueDetailPage() {
 
         <div className="mb-3 flex items-center gap-2">
           <Trophy className="h-5 w-5 text-neon" />
-          <h2 className="font-mono text-sm uppercase tracking-widest">Clasificación</h2>
+          <h2 className="text-sm uppercase tracking-widest">Clasificación</h2>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-border bg-card" style={{ backgroundImage: "var(--gradient-card)" }}>
@@ -147,7 +147,7 @@ function LeagueDetailPage() {
                 isMe && "bg-neon/10",
               )}>
                 <div className={cn(
-                  "grid h-8 w-8 place-items-center rounded-full font-mono text-xs font-bold",
+                  "grid h-8 w-8 place-items-center rounded-full text-xs font-bold",
                   rank === 1 ? "bg-neon text-neon-foreground" :
                   rank === 2 ? "bg-accent/80 text-accent-foreground" :
                   rank === 3 ? "bg-muted text-foreground" : "bg-background/60 text-muted-foreground",
@@ -159,10 +159,10 @@ function LeagueDetailPage() {
                     {r.display_name || r.username}
                     {isMe && <span className="ml-2 text-[10px] uppercase tracking-widest text-neon">tú</span>}
                   </div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">@{r.username}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">@{r.username}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-mono text-base font-bold tabular-nums text-neon">{r.bankroll.toLocaleString()} €</div>
+                  <div className="text-base font-bold text-neon">{r.bankroll.toLocaleString()} €</div>
                 </div>
               </div>
             );

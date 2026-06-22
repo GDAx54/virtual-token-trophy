@@ -9,7 +9,7 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Acceder · TokenBet" },
-      { name: "description", content: "Inicia sesión para apostar tokens virtuales con tus amigos." },
+      { name: "description", content: "Inicia sesión para apostar euros virtuales con tus amigos." },
     ],
   }),
   component: AuthPage,
@@ -71,11 +71,11 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5">
       <Link to="/" className="mb-8 text-center">
-        <div className="font-mono text-3xl font-bold tracking-tight">
+        <div className="text-3xl font-bold tracking-tight">
           token<span className="text-neon">bet</span>
         </div>
         <div className="mt-1 flex items-center justify-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
-          <Coins className="h-3 w-3 text-neon" /> 10,000 tokens al registrarte
+          <Coins className="h-3 w-3 text-neon" /> 10.000 € al registrarte
         </div>
       </Link>
 
@@ -145,7 +145,7 @@ function AuthPage() {
       </div>
 
       <p className="mt-6 max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground">
-        100% diversión, 0% dinero real. Todas las apuestas son con tokens virtuales sin valor monetario.
+        100% diversión, 0% dinero real. Todas las apuestas son con euros virtuales sin valor monetario.
       </p>
     </div>
   );
