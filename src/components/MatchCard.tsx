@@ -135,7 +135,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
             <div className="mt-3 space-y-3">
               {groupBy(extras, (e) => e.category).map(([cat, items]) => (
                 <div key={cat}>
-                  <div className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{cat}</div>
+                  <div className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">{cat}</div>
                   <div className="grid grid-cols-2 gap-2">
                     {items.map((m) => (
                       <Odds key={m.id} label={m.label} market={m} compact active={selected?.id === m.id}
