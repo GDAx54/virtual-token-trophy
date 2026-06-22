@@ -39,7 +39,7 @@ export function potentialProfit(stake: number, odds: number): number {
 }
 
 /**
- * Resolve a bet given each leg's result. Returns the net token delta
+ * Resolve a bet given each leg's result. Returns the net euro delta
  * to credit/debit the user balance (positive = win, negative = loss).
  * Assumes the stake was already deducted at bet placement.
  */
