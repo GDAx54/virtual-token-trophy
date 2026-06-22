@@ -41,7 +41,7 @@ export function AppHeader({ subtitle }: { subtitle?: string }) {
     <header className="sticky top-0 z-20 border-b border-border bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-5 py-4">
         <Link to="/" className="min-w-0">
-          <div className="font-mono text-lg font-bold tracking-tight">
+          <div className="text-lg font-bold tracking-tight">
             token<span className="text-neon">bet</span>
           </div>
           <p className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -52,14 +52,14 @@ export function AppHeader({ subtitle }: { subtitle?: string }) {
         {league ? (
           <div className="flex items-center gap-2 rounded-full border border-neon/30 bg-neon/10 px-3 py-1.5">
             <Euro className="h-4 w-4 text-neon" />
-            <span className="font-mono text-sm font-bold tabular-nums text-neon">
+            <span className="text-sm font-bold text-neon">
               {league.bankroll.toLocaleString()}
             </span>
           </div>
         ) : (
           <Link
             to="/leagues"
-            className="flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs font-mono text-muted-foreground hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
           >
             <Trophy className="h-3.5 w-3.5" /> Elegir liga
           </Link>
