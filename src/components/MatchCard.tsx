@@ -78,7 +78,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
       style={{ backgroundImage: "var(--gradient-card)" }}
     >
       <header className="flex items-center justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span className="font-mono">Mundial · {match.status === "live" ? "EN VIVO" : "Próximo"}</span>
+        <span>Mundial · {match.status === "live" ? "EN VIVO" : "Próximo"}</span>
         <span className="flex items-center gap-2">
           {hot && (
             <span className="flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 text-accent">
@@ -86,12 +86,12 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
             </span>
           )}
           {isLive ? (
-            <span className="flex items-center gap-1 rounded-full bg-destructive/15 px-2 py-0.5 font-mono text-destructive">
+            <span className="flex items-center gap-1 rounded-full bg-destructive/15 px-2 py-0.5 text-destructive">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-destructive" />
               {match.score?.minute ?? 0}'
             </span>
           ) : (
-            <span className="flex items-center gap-1 font-mono">
+            <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" /> <span suppressHydrationWarning>{kickoff || "--:--"}</span>
             </span>
           )}
