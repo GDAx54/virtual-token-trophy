@@ -9,7 +9,7 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Acceder · TokenBet" },
-      { name: "description", content: "Inicia sesión para apostar tokens virtuales con tus amigos." },
+      { name: "description", content: "Inicia sesión para apostar euros virtuales con tus amigos." },
     ],
   }),
   component: AuthPage,
