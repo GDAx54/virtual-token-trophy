@@ -21,7 +21,7 @@ export function TabBar() {
               key={to}
               to={to}
               className={cn(
-                "flex flex-col items-center gap-1 py-3 font-mono text-[10px] uppercase tracking-widest transition-colors",
+                "flex flex-col items-center gap-1 py-3 text-[10px] uppercase tracking-widest transition-colors",
                 active ? "text-neon" : "text-muted-foreground hover:text-foreground",
               )}
             >
