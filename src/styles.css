@@ -31,9 +31,9 @@
   --color-neon: var(--neon);
   --color-neon-foreground: var(--neon-foreground);
   --color-magenta: var(--magenta);
-  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", monospace;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", monospace;
 }
 
 :root {
