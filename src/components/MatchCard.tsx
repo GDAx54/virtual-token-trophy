@@ -153,7 +153,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
         <div className="mt-4 rounded-xl border border-neon/30 bg-background/60 p-3">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">{selected.label}</span>
-            <span className="font-mono font-bold text-neon">@ {selected.odds.toFixed(2)}</span>
+            <span className="font-bold text-neon">@ {selected.odds.toFixed(2)}</span>
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <input
@@ -161,10 +161,10 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
               min={1}
               value={stake}
               onChange={(e) => setStake(Math.max(1, Number(e.target.value) || 0))}
-              className="w-24 rounded-md border border-border bg-background/80 px-2 py-1.5 font-mono text-sm outline-none focus:border-neon"
+              className="w-24 rounded-md border border-border bg-background/80 px-2 py-1.5 text-sm outline-none focus:border-neon"
             />
             <span className="text-xs text-muted-foreground">
-              Retorno: <span className="font-mono text-foreground">{potentialPayout(stake, selected.odds).toLocaleString()}</span> €
+              Retorno: <span className="text-foreground">{potentialPayout(stake, selected.odds).toLocaleString()}</span> €
             </span>
             <button
               onClick={confirm}
