@@ -147,7 +147,7 @@ function LeagueDetailPage() {
                 isMe && "bg-neon/10",
               )}>
                 <div className={cn(
-                  "grid h-8 w-8 place-items-center rounded-full font-mono text-xs font-bold",
+                  "grid h-8 w-8 place-items-center rounded-full text-xs font-bold",
                   rank === 1 ? "bg-neon text-neon-foreground" :
                   rank === 2 ? "bg-accent/80 text-accent-foreground" :
                   rank === 3 ? "bg-muted text-foreground" : "bg-background/60 text-muted-foreground",
@@ -159,10 +159,10 @@ function LeagueDetailPage() {
                     {r.display_name || r.username}
                     {isMe && <span className="ml-2 text-[10px] uppercase tracking-widest text-neon">tú</span>}
                   </div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">@{r.username}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">@{r.username}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-mono text-base font-bold tabular-nums text-neon">{r.bankroll.toLocaleString()} €</div>
+                  <div className="text-base font-bold text-neon">{r.bankroll.toLocaleString()} €</div>
                 </div>
               </div>
             );
