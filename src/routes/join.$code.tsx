@@ -53,7 +53,7 @@ function JoinPage() {
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-center" style={{ backgroundImage: "var(--gradient-card)" }}>
         <Trophy className="mx-auto h-10 w-10 text-neon" />
         <h1 className="mt-3 text-lg font-bold">Invitación a una liga</h1>
-        <p className="mt-1 font-mono text-xs uppercase tracking-widest text-muted-foreground">Código: {code}</p>
+        <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">Código: {code}</p>
         <p className="mt-4 text-sm text-muted-foreground">
           {status === "joining" && "Uniéndote a la liga..."}
           {status === "done" && "¡Listo! Redirigiendo..."}
