@@ -71,11 +71,11 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5">
       <Link to="/" className="mb-8 text-center">
-        <div className="font-mono text-3xl font-bold tracking-tight">
+        <div className="text-3xl font-bold tracking-tight">
           token<span className="text-neon">bet</span>
         </div>
         <div className="mt-1 flex items-center justify-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
-          <Coins className="h-3 w-3 text-neon" /> 10,000 tokens al registrarte
+          <Coins className="h-3 w-3 text-neon" /> 10.000 € al registrarte
         </div>
       </Link>
 
