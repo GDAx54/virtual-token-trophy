@@ -12,7 +12,7 @@ export interface BetLeg {
 export interface Bet {
   id: string;
   userId: string;
-  stake: number;          // tokens wagered
+  stake: number;          // euros wagered
   legs: BetLeg[];         // 1 leg = single, >1 = parlay/combo
   status: BetStatus;
 }
