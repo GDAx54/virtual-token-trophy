@@ -66,19 +66,6 @@ export const Route = createFileRoute("/api/public/cron/sync-matches")({
   },
 });
 
-function ymdDash(d: Date) {
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
-}
-
-function mapStatus(s: string | null, postponed: string | null): "scheduled" | "live" | "finished" | "cancelled" {
-  if (postponed === "yes") return "cancelled";
-  const v = (s ?? "").toUpperCase();
-  if (["FT", "AET", "PEN"].includes(v)) return "finished";
-  if (["1H", "HT", "2H", "ET", "P", "LIVE"].includes(v)) return "live";
-  if (["CANC", "ABD", "PST"].includes(v)) return "cancelled";
-  return "scheduled";
-}
-
 async function handler({ request }: { request: Request }) {
   const apikey = request.headers.get("apikey");
   const expectedKey = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
