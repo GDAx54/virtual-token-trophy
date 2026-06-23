@@ -107,5 +107,5 @@ async function handler() {
     else upserted++;
   }
 
-  return Response.json({ ok: true, scanned: byId.size, upserted, tournament: TOURNAMENT_ID });
+  return Response.json({ ok: true, scanned: byId.size, upserted, tournament: TOURNAMENT_ID, seasonCount: seasonEvents.length, dayCount: dayEvents.length });
 }
