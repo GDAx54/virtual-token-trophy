@@ -48,9 +48,16 @@ async function handler() {
 
   // 1) Trae toda la temporada (una sola llamada barata)
   const seasonUrl = `https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=${WC_LEAGUE_ID}&s=${SEASON}`;
-  const seasonRes = await fetch(seasonUrl);
-  const seasonJson = seasonRes.ok ? ((await seasonRes.json()) as { events?: TsdbEvent[] }) : { events: [] };
-  const seasonEvents = seasonJson.events ?? [];
+  let seasonEvents: TsdbEvent[] = [];
+  try {
+    const seasonRes = await fetch(seasonUrl, { headers: { "User-Agent": "TokenBet/1.0" } });
+    const text = await seasonRes.text();
+    console.log("[sync-matches] season status", seasonRes.status, "len", text.length);
+    const parsed = JSON.parse(text) as { events?: TsdbEvent[] | null };
+    seasonEvents = parsed.events ?? [];
+  } catch (err) {
+    console.error("[sync-matches] season fetch failed", (err as Error).message);
+  }
 
   // 2) Refresca los próximos 3 días vía /eventsday para coger en-vivo y resultados frescos
   const days: string[] = [];
