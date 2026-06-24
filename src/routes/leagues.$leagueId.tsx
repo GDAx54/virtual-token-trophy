@@ -141,17 +141,45 @@ function LeagueDetailPage() {
           {rows.map((r, idx) => {
             const rank = idx + 1;
             const isMe = r.user_id === user?.id;
+            const podium =
+              rank === 1
+                ? {
+                    row: "bg-gradient-to-r from-[#FFD70022] via-[#FFB30011] to-transparent border-l-2 border-l-[#FFD700] animate-pulse-gold",
+                    badge: "bg-gradient-to-br from-[#FFE259] to-[#FFA751] text-black shadow-[0_0_18px_rgba(255,200,40,0.65)]",
+                    amount: "text-[#FFD700] drop-shadow-[0_0_8px_rgba(255,200,40,0.55)]",
+                  }
+                : rank === 2
+                ? {
+                    row: "bg-gradient-to-r from-[#C0C0C022] via-[#A8A8A811] to-transparent border-l-2 border-l-[#C0C0C0] animate-shimmer-silver",
+                    badge: "bg-gradient-to-br from-[#E8E8E8] to-[#9A9A9A] text-black shadow-[0_0_10px_rgba(200,200,200,0.45)]",
+                    amount: "text-[#D8D8D8]",
+                  }
+                : rank === 3
+                ? {
+                    row: "border-l-2 border-l-[#CD7F32]",
+                    badge: "bg-gradient-to-br from-[#E8A87C] to-[#8C4A1F] text-black",
+                    amount: "text-[#CD7F32]",
+                  }
+                : {
+                    row: "",
+                    badge: "bg-background/60 text-muted-foreground",
+                    amount: "text-neon",
+                  };
             return (
-              <div key={r.user_id} className={cn(
-                "flex items-center gap-3 border-b border-border/50 px-4 py-3 last:border-0",
-                isMe && "bg-neon/10",
-              )}>
-                <div className={cn(
-                  "grid h-8 w-8 place-items-center rounded-full text-xs font-bold",
-                  rank === 1 ? "bg-neon text-neon-foreground" :
-                  rank === 2 ? "bg-accent/80 text-accent-foreground" :
-                  rank === 3 ? "bg-muted text-foreground" : "bg-background/60 text-muted-foreground",
-                )}>
+              <div
+                key={r.user_id}
+                className={cn(
+                  "flex items-center gap-3 border-b border-border/50 px-4 py-3 last:border-0 transition-colors",
+                  podium.row,
+                  isMe && "ring-1 ring-inset ring-neon/40",
+                )}
+              >
+                <div
+                  className={cn(
+                    "grid h-9 w-9 place-items-center rounded-full text-xs font-bold",
+                    podium.badge,
+                  )}
+                >
                   {rank <= 3 ? <Medal className="h-4 w-4" /> : rank}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -159,10 +187,14 @@ function LeagueDetailPage() {
                     {r.display_name || r.username}
                     {isMe && <span className="ml-2 text-[10px] uppercase tracking-widest text-neon">tú</span>}
                   </div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">@{r.username}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    @{r.username} {rank === 1 && "· 🥇"} {rank === 2 && "· 🥈"} {rank === 3 && "· 🥉"}
+                  </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-base font-bold text-neon">{r.bankroll.toLocaleString()} €</div>
+                  <div className={cn("text-base font-bold tabular-nums", podium.amount)}>
+                    {r.bankroll.toLocaleString()} €
+                  </div>
                 </div>
               </div>
             );

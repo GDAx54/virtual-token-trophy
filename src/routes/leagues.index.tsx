@@ -10,7 +10,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/leagues")({
+export const Route = createFileRoute("/leagues/")({
   head: () => ({
     meta: [
       { title: "Mis ligas · TokenBet" },

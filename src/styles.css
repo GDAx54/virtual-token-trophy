@@ -112,3 +112,15 @@
   ::-webkit-scrollbar-thumb:hover { background: oklch(1 0 0 / 0.16); }
   button, a { transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
 }
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: inset 2px 0 0 #FFD700, 0 0 0 rgba(255, 200, 40, 0); }
+  50% { box-shadow: inset 2px 0 0 #FFD700, 0 0 16px rgba(255, 200, 40, 0.25); }
+}
+.animate-pulse-gold { animation: pulse-gold 2.4s ease-in-out infinite; }
+
+@keyframes shimmer-silver {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animate-shimmer-silver { background-size: 200% 100%; animation: shimmer-silver 3.5s ease-in-out infinite; }
