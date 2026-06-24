@@ -46,16 +46,24 @@ function LeagueDetailPage() {
 
       const { data: mems } = await supabase
         .from("league_members")
-        .select("user_id, bankroll, profiles!inner(username, display_name)")
+        .select("user_id, bankroll")
         .eq("league_id", leagueId)
         .order("bankroll", { ascending: false });
       if (cancelled || !mems) return;
-      setRows(mems.map((m: any) => ({
-        user_id: m.user_id,
-        bankroll: Number(m.bankroll),
-        username: m.profiles.username,
-        display_name: m.profiles.display_name,
-      })));
+      const ids = mems.map((m: any) => m.user_id);
+      const { data: profs } = ids.length
+        ? await supabase.from("profiles").select("id, username, display_name").in("id", ids)
+        : { data: [] as any[] };
+      const pmap = new Map((profs ?? []).map((p: any) => [p.id, p]));
+      setRows(mems.map((m: any) => {
+        const p = pmap.get(m.user_id);
+        return {
+          user_id: m.user_id,
+          bankroll: Number(m.bankroll),
+          username: p?.username ?? "—",
+          display_name: p?.display_name ?? null,
+        };
+      }));
     };
     load();
 

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Flame, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { potentialPayout } from "@/lib/betting";
+import { flagFor } from "@/lib/flags";
 
 export interface MarketRow {
   id: string;
@@ -182,10 +183,14 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
 
 function Team({ team, align }: { team: { name: string; short?: string }; align: "left" | "right" }) {
   const abbr = (team.short ?? team.name ?? "?").slice(0, 3).toUpperCase();
+  const flag = flagFor(team.short, team.name);
   return (
     <div className={cn("flex items-center gap-2", align === "right" && "flex-row-reverse text-right")}>
-      <div className="grid h-10 w-10 place-items-center rounded-full bg-muted text-xs font-bold ring-1 ring-border">
-        {abbr}
+      <div
+        className="grid h-10 w-10 place-items-center rounded-full bg-muted text-xs font-bold ring-1 ring-border"
+        aria-label={team.name}
+      >
+        {flag ? <span className="text-2xl leading-none">{flag}</span> : abbr}
       </div>
       <div className="min-w-0">
         <div className="truncate text-sm font-semibold">{team.name}</div>
