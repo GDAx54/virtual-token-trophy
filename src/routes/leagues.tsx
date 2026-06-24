@@ -106,8 +106,10 @@ function LeaguesPage() {
             {rows.map((l) => {
               const active = l.id === leagueId;
               return (
-                <div
+                <Link
                   key={l.id}
+                  to="/leagues/$leagueId"
+                  params={{ leagueId: l.id }}
                   className={cn(
                     "flex items-center gap-3 rounded-2xl border bg-card p-4 transition-colors",
                     active ? "border-neon/60" : "border-border hover:border-neon/30",
@@ -115,20 +117,17 @@ function LeaguesPage() {
                   style={{ backgroundImage: "var(--gradient-card)" }}
                 >
                   <button
-                    onClick={() => setLeague(l.id)}
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setLeague(l.id); }}
                     title={active ? "Liga activa" : "Activar liga"}
                     className={cn(
-                      "grid h-10 w-10 place-items-center rounded-full",
+                      "grid h-10 w-10 shrink-0 place-items-center rounded-full",
                       active ? "bg-neon text-neon-foreground" : "bg-muted text-muted-foreground hover:bg-neon/30",
                     )}
                   >
                     {active ? <Check className="h-5 w-5" /> : <Trophy className="h-5 w-5" />}
                   </button>
-                  <Link
-                    to="/leagues/$leagueId"
-                    params={{ leagueId: l.id }}
-                    className="min-w-0 flex-1"
-                  >
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <div className="truncate text-base font-semibold">{l.name}</div>
                       {active && <span className="rounded-full bg-neon/15 px-2 py-0.5 text-[9px] uppercase tracking-widest text-neon">activa</span>}
@@ -137,13 +136,15 @@ function LeaguesPage() {
                       <span>{l.members} {l.members === 1 ? "miembro" : "miembros"}</span>
                       <span>·</span>
                       <span>código {l.invite_code}</span>
+                      <span>·</span>
+                      <span className="text-neon">Ver ranking →</span>
                     </div>
-                  </Link>
+                  </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-neon">{l.bankroll.toLocaleString()} €</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
+                </Link>
               );
             })}
           </div>
