@@ -9,7 +9,7 @@ import { setActiveLeagueId } from "@/hooks/use-active-league";
 export const Route = createFileRoute("/join/$code")({
   head: () => ({
     meta: [
-      { title: "Unirse a una liga · TokenBet" },
+      { title: "Unirse a una liga · 90x" },
       { name: "description", content: "Únete a la liga privada de un amigo." },
     ],
   }),

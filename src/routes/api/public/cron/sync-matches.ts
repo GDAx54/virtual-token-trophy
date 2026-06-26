@@ -83,7 +83,7 @@ async function handler({ request }: { request: Request }) {
 
   const dates = `${ymdCompact(start)}-${ymdCompact(end)}`;
   const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LEAGUE}/scoreboard?dates=${dates}&limit=200`;
-  const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "TokenBet/1.0" } });
+  const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "90x/1.0" } });
 
   if (!res.ok) {
     return Response.json({ ok: false, error: `ESPN respondió ${res.status}` }, { status: 502 });

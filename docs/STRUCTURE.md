@@ -1,4 +1,4 @@
-# TokenBet — Estructura del proyecto
+# 90x — Estructura del proyecto
 
 > Nota: este scaffold corre sobre **TanStack Start (web)** porque es el stack del
 > entorno Lovable. La lógica (esquema, mercados, cálculo de retornos, mock data) es

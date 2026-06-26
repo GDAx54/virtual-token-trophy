@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/leagues/")({
   head: () => ({
     meta: [
-      { title: "Mis ligas · TokenBet" },
+      { title: "Mis ligas · 90x" },
       { name: "description", content: "Crea ligas privadas, invita a tus amigos y compite por el mayor patrimonio." },
     ],
   }),

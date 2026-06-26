@@ -8,7 +8,7 @@ import { Coins } from "lucide-react";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Acceder · TokenBet" },
+      { title: "Acceder · 90x" },
       { name: "description", content: "Inicia sesión para apostar euros virtuales con tus amigos." },
     ],
   }),

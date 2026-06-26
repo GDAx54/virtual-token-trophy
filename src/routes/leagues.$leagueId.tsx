@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/leagues/$leagueId")({
   head: () => ({
     meta: [
-      { title: "Clasificación de la liga · TokenBet" },
+      { title: "Clasificación de la liga · 90x" },
       { name: "description", content: "Ranking en tiempo real por patrimonio neto." },
     ],
   }),
@@ -84,7 +84,7 @@ function LeagueDetailPage() {
 
   const share = async () => {
     if (!inviteUrl || !league) return;
-    const text = `Únete a "${league.name}" en TokenBet con el código ${league.invite_code}: ${inviteUrl}`;
+    const text = `Únete a "${league.name}" en 90x con el código ${league.invite_code}: ${inviteUrl}`;
     if (typeof navigator !== "undefined" && (navigator as any).share) {
       try { await (navigator as any).share({ title: league.name, text, url: inviteUrl }); return; } catch {/* */}
     }
