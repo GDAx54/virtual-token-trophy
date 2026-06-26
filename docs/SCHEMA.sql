@@ -1,4 +1,4 @@
--- TokenBet — Esquema base (PostgreSQL / Supabase)
+-- 90x — Esquema base (PostgreSQL / Supabase)
 -- Economía 100% virtual. Sin dinero real.
 
 create type app_role        as enum ('user','admin');

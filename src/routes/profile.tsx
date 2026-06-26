@@ -11,7 +11,7 @@ import { TabBar } from "@/components/TabBar";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "Perfil · TokenBet" },
+      { title: "Perfil · 90x" },
       { name: "description", content: "Tu perfil, bankroll y estadísticas." },
     ],
   }),

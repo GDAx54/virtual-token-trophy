@@ -13,7 +13,7 @@ import { MatchCard, type MatchRow } from "@/components/MatchCard";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "TokenBet — Apuestas sociales en euros virtuales" },
+      { title: "90x — Apuestas sociales en euros virtuales" },
       { name: "description", content: "Compite con tus amigos en ligas privadas. 100% dinero virtual." },
     ],
   }),

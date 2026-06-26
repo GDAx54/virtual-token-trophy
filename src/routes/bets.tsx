@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/bets")({
   head: () => ({
     meta: [
-      { title: "Mis apuestas · TokenBet" },
+      { title: "Mis apuestas · 90x" },
       { name: "description", content: "Historial y apuestas activas." },
     ],
   }),
