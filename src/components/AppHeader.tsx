@@ -42,7 +42,7 @@ export function AppHeader({ subtitle }: { subtitle?: string }) {
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-5 py-4">
         <Link to="/" className="min-w-0">
           <div className="text-lg font-bold tracking-tight">
-            token<span className="text-neon">bet</span>
+            90<span className="text-neon">x</span>
           </div>
           <p className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
             {subtitle ?? (league ? league.name : "Sin liga activa")}
