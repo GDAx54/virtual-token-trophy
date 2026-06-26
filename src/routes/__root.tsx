@@ -89,6 +89,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "90x is a social sports betting app using virtual currency for competitive leagues." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/eef009c4-e52a-490f-9938-6880bb36e001/id-preview-8b7645cc--e4c4b29c-5a40-4029-8611-bf0c8ce516ce.lovable.app-1782291508668.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/eef009c4-e52a-490f-9938-6880bb36e001/id-preview-8b7645cc--e4c4b29c-5a40-4029-8611-bf0c8ce516ce.lovable.app-1782291508668.png" },
+      { name: "theme-color", content: "#0b0f19" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "90x" },
+      { name: "mobile-web-app-capable", content: "yes" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -98,6 +103,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Onest:wght@400;500;600;700&display=swap",
       },
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/icon-192.png" },
+      { rel: "icon", type: "image/png", sizes: "512x512", href: "/icon-512.png" },
+      { rel: "apple-touch-icon", href: "/icon-192.png" },
+
     ],
   }),
   shellComponent: RootShell,
