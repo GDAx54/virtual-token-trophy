@@ -18,18 +18,19 @@ export const Route = createFileRoute("/profile")({
   component: () => <RequireAuth><ProfilePage /></RequireAuth>,
 });
 
-interface ProfileData { username: string; display_name: string | null; bankroll: number; total_won: number }
+interface ProfileData { username: string; display_name: string | null; bankroll: number; total_won: number; referral_bonus: number }
 
 function ProfilePage() {
   const { user } = useSession();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [stats, setStats] = useState({ active: 0, won: 0, lost: 0 });
+  const [referredCount, setReferredCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("username, display_name, bankroll, total_won").eq("id", user.id).single()
-      .then(({ data }) => data && setProfile(data));
+    supabase.from("profiles").select("username, display_name, bankroll, total_won, referral_bonus").eq("id", user.id).single()
+      .then(({ data }) => data && setProfile(data as ProfileData));
     supabase.from("bets").select("status").eq("user_id", user.id).then(({ data }) => {
       if (!data) return;
       setStats({
@@ -38,7 +39,39 @@ function ProfilePage() {
         lost: data.filter((b) => b.status === "lost").length,
       });
     });
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", user.id)
+      .then(({ count }) => setReferredCount(count ?? 0));
   }, [user]);
+
+  const referralLink = useMemo(() => {
+    if (!profile?.username || typeof window === "undefined") return "";
+    return `${window.location.origin}/auth?ref=${encodeURIComponent(profile.username)}`;
+  }, [profile?.username]);
+
+  const copyLink = async () => {
+    if (!referralLink) return;
+    try {
+      await navigator.clipboard.writeText(referralLink);
+      toast.success("Enlace copiado", { description: "Compártelo con tus amigos" });
+    } catch {
+      toast.error("No se pudo copiar");
+    }
+  };
+
+  const shareLink = async () => {
+    if (!referralLink) return;
+    if (typeof navigator !== "undefined" && "share" in navigator) {
+      try {
+        await (navigator as Navigator & { share: (d: ShareData) => Promise<void> }).share({
+          title: "Únete a 90x",
+          text: "Regístrate en 90x con mi enlace y ambos ganamos 2.000 €",
+          url: referralLink,
+        });
+        return;
+      } catch {}
+    }
+    copyLink();
+  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -64,6 +97,38 @@ function ProfilePage() {
           <Stat label="Ganadas" value={stats.won} icon={<Trophy className="h-4 w-4 text-neon" />} />
           <Stat label="Total ganado" value={(profile?.total_won ?? 0).toLocaleString()} />
         </div>
+
+        <section className="mt-6 rounded-2xl border border-neon/30 bg-card p-5" style={{ backgroundImage: "var(--gradient-card)" }}>
+          <div className="flex items-center gap-2 text-neon">
+            <Gift className="h-5 w-5" />
+            <h2 className="text-sm font-bold uppercase tracking-widest">Invita y gana 2.000 €</h2>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Cuando un amigo se registre con tu enlace, <span className="font-semibold text-foreground">ambos recibís 2.000 €</span> en cada liga actual y en las futuras.
+          </p>
+
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-2">
+            <input readOnly value={referralLink} className="min-w-0 flex-1 truncate bg-transparent text-xs outline-none" />
+            <button onClick={copyLink} className="rounded-md p-1.5 text-muted-foreground transition-colors hover:text-neon" aria-label="Copiar">
+              <Copy className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="mt-3 flex items-center justify-between">
+            <div className="text-[11px] text-muted-foreground">
+              Referidos: <span className="font-semibold text-foreground">{referredCount}</span>
+              {profile && profile.referral_bonus > 0 && (
+                <> · Bono: <span className="font-semibold text-neon">+{profile.referral_bonus.toLocaleString()} €</span></>
+              )}
+            </div>
+            <button
+              onClick={shareLink}
+              className="rounded-lg bg-neon px-3 py-1.5 text-xs font-bold text-neon-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-105 active:scale-95"
+            >
+              Compartir
+            </button>
+          </div>
+        </section>
 
         <button
           onClick={signOut}
