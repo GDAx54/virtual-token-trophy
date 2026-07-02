@@ -6,6 +6,7 @@ import { lovable } from "@/integrations/lovable";
 import { Coins } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (s: Record<string, unknown>) => ({ ref: typeof s.ref === "string" ? s.ref : undefined }),
   head: () => ({
     meta: [
       { title: "Acceder · 90x" },
@@ -17,17 +18,35 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const { ref: refParam } = Route.useSearch();
+  const [mode, setMode] = useState<"signin" | "signup">(refParam ? "signup" : "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
+    if (refParam) {
+      try { sessionStorage.setItem("90x_ref", refParam); } catch {}
+    }
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) navigate({ to: "/", replace: true });
     });
-  }, [navigate]);
+  }, [navigate, refParam]);
+
+  const applyPendingReferral = async () => {
+    let code: string | null = null;
+    try { code = sessionStorage.getItem("90x_ref"); } catch {}
+    if (!code) return;
+    const { data, error } = await supabase.rpc("apply_referral", { _ref_username: code });
+    try { sessionStorage.removeItem("90x_ref"); } catch {}
+    const res = data as { ok?: boolean; bonus?: number; reason?: string } | null;
+    if (!error && res?.ok) {
+      toast.success(`+${res.bonus} € de bienvenida`, { description: "Tú y tu amigo habéis ganado el bono." });
+    } else if (res?.reason) {
+      toast.message("Referido no aplicado", { description: res.reason });
+    }
+  };
 
   const handleEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,10 +62,12 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        await applyPendingReferral();
         toast.success("Cuenta creada", { description: "¡Bienvenido al juego!" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        await applyPendingReferral();
       }
       navigate({ to: "/", replace: true });
     } catch (err) {
@@ -65,6 +86,7 @@ function AuthPage() {
       return;
     }
     if (result.redirected) return;
+    await applyPendingReferral();
     navigate({ to: "/", replace: true });
   };
 
@@ -72,12 +94,18 @@ function AuthPage() {
     <div className="flex min-h-screen flex-col items-center justify-center px-5">
       <Link to="/" className="mb-8 text-center">
         <div className="text-3xl font-bold tracking-tight">
-          token<span className="text-neon">bet</span>
+          90<span className="text-neon">x</span>
         </div>
         <div className="mt-1 flex items-center justify-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
           <Coins className="h-3 w-3 text-neon" /> 10.000 € al registrarte
         </div>
       </Link>
+
+      {refParam && (
+        <div className="mb-4 w-full max-w-sm rounded-xl border border-neon/40 bg-neon/10 px-4 py-3 text-center text-xs text-neon">
+          🎁 Invitado por <span className="font-bold">@{refParam}</span> · +2.000 € extra al registrarte
+        </div>
+      )}
 
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6" style={{ backgroundImage: "var(--gradient-card)" }}>
         <div className="mb-4 grid grid-cols-2 gap-1 rounded-lg bg-background/60 p-1">
