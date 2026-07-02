@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { LogOut, Coins, Trophy, Receipt } from "lucide-react";
+import { LogOut, Coins, Trophy, Receipt, Gift, Copy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { RequireAuth } from "@/components/RequireAuth";
