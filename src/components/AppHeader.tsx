@@ -43,9 +43,11 @@ export function AppHeader({ subtitle }: { subtitle?: string }) {
     <header className="sticky top-0 z-20 border-b border-border bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-5 py-4">
         <Link to="/" className="min-w-0">
-          <div className="text-lg font-bold tracking-tight">
-            90<span className="text-neon">x</span>
-          </div>
+          <img
+            src={logoAsset.url}
+            alt="90x"
+            className="h-10 w-auto rounded-xl"
+          />
           <p className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
             {subtitle ?? (league ? league.name : "Sin liga activa")}
           </p>
