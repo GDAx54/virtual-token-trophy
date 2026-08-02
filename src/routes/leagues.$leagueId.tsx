@@ -227,7 +227,42 @@ function LeagueDetailPage() {
             );
           })}
         </div>
+
+        <button
+          onClick={() => setConfirmLeave(true)}
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2.5 text-sm font-bold text-destructive"
+        >
+          <LogOut className="h-4 w-4" /> Salir de la liga
+        </button>
       </main>
+
+      {confirmLeave && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-background/80 p-5 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-5">
+            <h3 className="text-base font-bold">¿Seguro que quieres salir?</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Saldrás de «{league?.name ?? "esta liga"}» y perderás tu saldo en ella. Los demás
+              seguirán compitiendo sin ti.
+            </p>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setConfirmLeave(false)}
+                className="flex-1 rounded-lg border border-border bg-background/60 px-3 py-2 text-sm font-medium"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={leaveLeague}
+                disabled={leaving}
+                className="flex-1 rounded-lg bg-destructive px-3 py-2 text-sm font-bold text-destructive-foreground disabled:opacity-50"
+              >
+                {leaving ? "Saliendo..." : "Sí, salir"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <TabBar />
     </div>
   );
