@@ -95,10 +95,12 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5">
       <Link to="/" className="mb-8 text-center">
-        <div className="text-3xl font-bold tracking-tight">
-          90<span className="text-neon">x</span>
-        </div>
-        <div className="mt-1 flex items-center justify-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
+        <img
+          src={logoAsset.url}
+          alt="90x"
+          className="mx-auto h-20 w-auto rounded-3xl"
+        />
+        <div className="mt-2 flex items-center justify-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
           <Coins className="h-3 w-3 text-neon" /> 10.000 € al registrarte
         </div>
       </Link>
