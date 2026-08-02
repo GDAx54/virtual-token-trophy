@@ -4,6 +4,8 @@ import { Euro, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { useActiveLeague } from "@/hooks/use-active-league";
+import logoAsset from "@/assets/logo_90x.png.asset.json";
+
 
 interface LeagueInfo { id: string; name: string; bankroll: number }
 
