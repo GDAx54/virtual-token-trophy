@@ -9,24 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as BetsRouteImport } from './routes/bets'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BetsRouteImport } from './routes/bets'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as LeaguesIndexRouteImport } from './routes/leagues.index'
 import { Route as LeaguesLeagueIdRouteImport } from './routes/leagues.$leagueId'
-import { Route as JoinCodeRouteImport } from './routes/join.$code'
-import { Route as ApiPublicCronSyncMatchesRouteImport } from './routes/api/public/cron/sync-matches'
 import { Route as ApiPublicCronResolveBetsRouteImport } from './routes/api/public/cron/resolve-bets'
+import { Route as ApiPublicCronSyncMatchesRouteImport } from './routes/api/public/cron/sync-matches'
 
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BetsRoute = BetsRouteImport.update({
-  id: '/bets',
-  path: '/bets',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -34,9 +29,19 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BetsRoute = BetsRouteImport.update({
+  id: '/bets',
+  path: '/bets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinCodeRoute = JoinCodeRouteImport.update({
+  id: '/join/$code',
+  path: '/join/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeaguesIndexRoute = LeaguesIndexRouteImport.update({
@@ -49,21 +54,16 @@ const LeaguesLeagueIdRoute = LeaguesLeagueIdRouteImport.update({
   path: '/leagues/$leagueId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JoinCodeRoute = JoinCodeRouteImport.update({
-  id: '/join/$code',
-  path: '/join/$code',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicCronSyncMatchesRoute =
-  ApiPublicCronSyncMatchesRouteImport.update({
-    id: '/api/public/cron/sync-matches',
-    path: '/api/public/cron/sync-matches',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const ApiPublicCronResolveBetsRoute =
   ApiPublicCronResolveBetsRouteImport.update({
     id: '/api/public/cron/resolve-bets',
     path: '/api/public/cron/resolve-bets',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicCronSyncMatchesRoute =
+  ApiPublicCronSyncMatchesRouteImport.update({
+    id: '/api/public/cron/sync-matches',
+    path: '/api/public/cron/sync-matches',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -151,18 +151,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bets': {
-      id: '/bets'
-      path: '/bets'
-      fullPath: '/bets'
-      preLoaderRoute: typeof BetsRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -172,11 +165,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/bets': {
+      id: '/bets'
+      path: '/bets'
+      fullPath: '/bets'
+      preLoaderRoute: typeof BetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join/$code': {
+      id: '/join/$code'
+      path: '/join/$code'
+      fullPath: '/join/$code'
+      preLoaderRoute: typeof JoinCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leagues/': {
@@ -193,11 +200,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaguesLeagueIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/join/$code': {
-      id: '/join/$code'
-      path: '/join/$code'
-      fullPath: '/join/$code'
-      preLoaderRoute: typeof JoinCodeRouteImport
+    '/api/public/cron/resolve-bets': {
+      id: '/api/public/cron/resolve-bets'
+      path: '/api/public/cron/resolve-bets'
+      fullPath: '/api/public/cron/resolve-bets'
+      preLoaderRoute: typeof ApiPublicCronResolveBetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/cron/sync-matches': {
@@ -205,13 +212,6 @@ declare module '@tanstack/react-router' {
       path: '/api/public/cron/sync-matches'
       fullPath: '/api/public/cron/sync-matches'
       preLoaderRoute: typeof ApiPublicCronSyncMatchesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/cron/resolve-bets': {
-      id: '/api/public/cron/resolve-bets'
-      path: '/api/public/cron/resolve-bets'
-      fullPath: '/api/public/cron/resolve-bets'
-      preLoaderRoute: typeof ApiPublicCronResolveBetsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -231,3 +231,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
