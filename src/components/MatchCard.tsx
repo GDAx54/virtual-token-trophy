@@ -14,8 +14,8 @@ export interface MarketRow {
 
 export interface MatchRow {
   id: string;
-  home_team: { name: string; short: string };
-  away_team: { name: string; short: string };
+  home_team: { name: string; short: string; logo?: string | null };
+  away_team: { name: string; short: string; logo?: string | null };
   kickoff_at: string;
   status: "scheduled" | "live" | "finished" | "cancelled";
   score?: { home: number; away: number; minute?: number } | null;
@@ -79,7 +79,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
       style={{ backgroundImage: "var(--gradient-card)" }}
     >
       <header className="flex items-center justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span>Mundial · {match.status === "live" ? "EN VIVO" : "Próximo"}</span>
+        <span>LaLiga · {match.status === "live" ? "EN VIVO" : "Próximo"}</span>
         <span className="flex items-center gap-2">
           {hot && (
             <span className="flex items-center gap-1 rounded-full bg-accent/15 px-2 py-0.5 text-accent">
@@ -181,16 +181,22 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
   );
 }
 
-function Team({ team, align }: { team: { name: string; short?: string }; align: "left" | "right" }) {
+function Team({ team, align }: { team: { name: string; short?: string; logo?: string | null }; align: "left" | "right" }) {
   const abbr = (team.short ?? team.name ?? "?").slice(0, 3).toUpperCase();
-  const flag = flagFor(team.short, team.name);
+  const flag = team.logo ? null : flagFor(team.short, team.name);
   return (
     <div className={cn("flex items-center gap-2", align === "right" && "flex-row-reverse text-right")}>
       <div
         className="grid h-10 w-10 place-items-center rounded-full bg-muted text-xs font-bold ring-1 ring-border"
         aria-label={team.name}
       >
-        {flag ? <span className="text-2xl leading-none">{flag}</span> : abbr}
+        {team.logo ? (
+          <img src={team.logo} alt={team.name} loading="lazy" className="h-8 w-8 object-contain" />
+        ) : flag ? (
+          <span className="text-2xl leading-none">{flag}</span>
+        ) : (
+          abbr
+        )}
       </div>
       <div className="min-w-0">
         <div className="truncate text-sm font-semibold">{team.name}</div>
