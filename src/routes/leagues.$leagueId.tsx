@@ -25,10 +25,29 @@ interface MemberRow { user_id: string; bankroll: number; username: string; displ
 function LeagueDetailPage() {
   const { leagueId } = Route.useParams();
   const { user } = useSession();
+  const navigate = useNavigate();
   const { leagueId: activeId, setLeague } = useActiveLeague();
   const [league, setLeagueData] = useState<LeagueData | null>(null);
   const [rows, setRows] = useState<MemberRow[]>([]);
   const [copied, setCopied] = useState(false);
+  const [confirmLeave, setConfirmLeave] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+
+  const leaveLeague = async () => {
+    if (!user || leaving) return;
+    setLeaving(true);
+    const { error } = await supabase
+      .from("league_members")
+      .delete()
+      .eq("league_id", leagueId)
+      .eq("user_id", user.id);
+    setLeaving(false);
+    if (error) { toast.error(error.message); return; }
+    if (activeId === leagueId) setLeague(null);
+    setConfirmLeave(false);
+    toast.success("Has salido de la liga");
+    navigate({ to: "/leagues" });
+  };
 
   useEffect(() => {
     if (!user) return;
