@@ -1,9 +1,9 @@
-// Cron: trae partidos reales del Mundial desde el marcador público de ESPN
+// Cron: trae partidos reales de LaLiga desde el marcador público de ESPN
 // y los sincroniza con la DB. Cubre partidos recientes, en directo y próximos.
 import { createFileRoute } from "@tanstack/react-router";
 
-const TOURNAMENT_ID = "fifa-wc-2026";
-const ESPN_LEAGUE = "fifa.world";
+const TOURNAMENT_ID = "laliga-2026";
+const ESPN_LEAGUE = "esp.1";
 
 type MatchStatus = "scheduled" | "live" | "finished" | "cancelled";
 
@@ -241,9 +241,15 @@ async function closeStaleMatches(supabaseAdmin: any, syncStartedAt: string, star
   const { data: fakeRows } = await supabaseAdmin
     .from("matches")
     .select("id")
-    .eq("tournament_id", TOURNAMENT_ID)
     .in("status", ["scheduled", "live"])
     .not("id", "like", "espn:%");
+
+  // Partidos de torneos antiguos (p. ej. el Mundial ya finalizado)
+  const { data: otherTournamentRows } = await supabaseAdmin
+    .from("matches")
+    .select("id")
+    .neq("tournament_id", TOURNAMENT_ID)
+    .in("status", ["scheduled", "live"]);
 
   const { data: staleEspnRows } = await supabaseAdmin
     .from("matches")
@@ -255,7 +261,7 @@ async function closeStaleMatches(supabaseAdmin: any, syncStartedAt: string, star
     .lte("kickoff_at", endIso)
     .lt("updated_at", syncStartedAt);
 
-  const staleIds = [...(fakeRows ?? []), ...(staleEspnRows ?? [])].map((row: { id: string }) => row.id);
+  const staleIds = [...(fakeRows ?? []), ...(otherTournamentRows ?? []), ...(staleEspnRows ?? [])].map((row: { id: string }) => row.id);
   if (staleIds.length === 0) return 0;
 
   await supabaseAdmin.from("markets").update({ is_open: false }).in("match_id", staleIds);
