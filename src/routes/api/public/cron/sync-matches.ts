@@ -79,7 +79,7 @@ async function handler({ request }: { request: Request }) {
   const start = new Date();
   start.setUTCDate(start.getUTCDate() - 2);
   const end = new Date();
-  end.setUTCDate(end.getUTCDate() + 14);
+  end.setUTCDate(end.getUTCDate() + 30);
 
   const dates = `${ymdCompact(start)}-${ymdCompact(end)}`;
   const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LEAGUE}/scoreboard?dates=${dates}&limit=200`;
