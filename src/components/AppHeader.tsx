@@ -6,7 +6,6 @@ import { useSession } from "@/hooks/use-session";
 import { useActiveLeague } from "@/hooks/use-active-league";
 import logoAsset from "@/assets/logo_90x.png.asset.json";
 
-
 interface LeagueInfo { id: string; name: string; bankroll: number }
 
 export function AppHeader({ subtitle }: { subtitle?: string }) {
