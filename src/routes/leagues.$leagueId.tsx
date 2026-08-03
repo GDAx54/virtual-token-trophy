@@ -141,12 +141,31 @@ function LeagueDetailPage() {
       }
     }
     try {
-      await navigator.clipboard.writeText(text);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        throw new Error("no clipboard api");
+      }
       toast.success("Copiado. Pégalo en tu grupo.");
     } catch {
-      /* noop */
+      // Fallback para navegadores/iframes sin permisos de portapapeles
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        if (!ok) throw new Error("copy failed");
+        toast.success("Copiado. Pégalo en tu grupo.");
+      } catch {
+        toast.error("No se pudo copiar. Copia el texto manualmente.");
+      }
     }
   };
+
 
   const isActive = activeId === leagueId;
 
