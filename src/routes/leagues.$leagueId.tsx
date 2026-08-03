@@ -122,8 +122,34 @@ function LeagueDetailPage() {
     }
   };
 
+  const myRank = user ? rows.findIndex((r) => r.user_id === user.id) + 1 : 0;
+
+  const shareMyRank = async () => {
+    if (!inviteUrl || !league || !myRank) return;
+    const text =
+      myRank === 1
+        ? `Voy 1.º en «${league.name}». ¿Alguien me baja del liderato?\n\nÚnete: ${inviteUrl}`
+        : myRank <= 3
+        ? `Estoy ${myRank}º en «${league.name}». Voy a por el liderato.\n\nÚnete: ${inviteUrl}`
+        : `Voy ${myRank}º en «${league.name}», pero esto acaba de empezar.\n\n¿Me retas? ${inviteUrl}`;
+    if (typeof navigator !== "undefined" && (navigator as any).share) {
+      try {
+        await (navigator as any).share({ title: league.name, text, url: inviteUrl });
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copiado. Pégalo en tu grupo.");
+    } catch {
+      /* noop */
+    }
+  };
 
   const isActive = activeId === leagueId;
+
 
   return (
     <div className="min-h-screen pb-24">
