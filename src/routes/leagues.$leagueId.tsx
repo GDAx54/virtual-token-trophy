@@ -103,15 +103,25 @@ function LeagueDetailPage() {
 
   const share = async () => {
     if (!inviteUrl || !league) return;
-    const text = `Únete a "${league.name}" en 90x con el código ${league.invite_code}: ${inviteUrl}`;
+    const text = `He creado la liga «${league.name}» en 90x.\n\nÚnete antes de la próxima jornada y demuestra quién sabe más de fútbol.\n\n${inviteUrl} Código: ${league.invite_code}`;
     if (typeof navigator !== "undefined" && (navigator as any).share) {
-      try { await (navigator as any).share({ title: league.name, text, url: inviteUrl }); return; } catch {/* */}
+      try {
+        await (navigator as any).share({ title: league.name, text, url: inviteUrl });
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === "AbortError") return;
+      }
     }
-    await navigator.clipboard.writeText(inviteUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-    toast.success("Enlace copiado");
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+      toast.success("Invitación copiada. Pégala en tu grupo.");
+    } catch {
+      /* noop */
+    }
   };
+
 
   const isActive = activeId === leagueId;
 
