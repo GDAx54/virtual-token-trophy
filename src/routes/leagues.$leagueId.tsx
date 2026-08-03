@@ -199,6 +199,16 @@ function LeagueDetailPage() {
           <h2 className="text-sm uppercase tracking-widest">Clasificación</h2>
         </div>
 
+        {myRank > 0 && (
+          <button
+            onClick={shareMyRank}
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/60 px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-neon/40"
+          >
+            <Share2 className="h-4 w-4" /> Compartir mi posición
+          </button>
+        )}
+
+
         <div className="overflow-hidden rounded-2xl border border-border bg-card" style={{ backgroundImage: "var(--gradient-card)" }}>
           {rows.length === 0 && <div className="p-6 text-center text-sm text-muted-foreground">Aún no hay miembros.</div>}
           {rows.map((r, idx) => {
