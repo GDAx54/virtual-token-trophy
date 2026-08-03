@@ -122,8 +122,34 @@ function LeagueDetailPage() {
     }
   };
 
+  const myRank = user ? rows.findIndex((r) => r.user_id === user.id) + 1 : 0;
+
+  const shareMyRank = async () => {
+    if (!inviteUrl || !league || !myRank) return;
+    const text =
+      myRank === 1
+        ? `Voy 1.º en «${league.name}». ¿Alguien me baja del liderato?\n\nÚnete: ${inviteUrl}`
+        : myRank <= 3
+        ? `Estoy ${myRank}º en «${league.name}». Voy a por el liderato.\n\nÚnete: ${inviteUrl}`
+        : `Voy ${myRank}º en «${league.name}», pero esto acaba de empezar.\n\n¿Me retas? ${inviteUrl}`;
+    if (typeof navigator !== "undefined" && (navigator as any).share) {
+      try {
+        await (navigator as any).share({ title: league.name, text, url: inviteUrl });
+        return;
+      } catch (err) {
+        if ((err as Error)?.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copiado. Pégalo en tu grupo.");
+    } catch {
+      /* noop */
+    }
+  };
 
   const isActive = activeId === leagueId;
+
 
   return (
     <div className="min-h-screen pb-24">
@@ -172,6 +198,16 @@ function LeagueDetailPage() {
           <Trophy className="h-5 w-5 text-neon" />
           <h2 className="text-sm uppercase tracking-widest">Clasificación</h2>
         </div>
+
+        {myRank > 0 && (
+          <button
+            onClick={shareMyRank}
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/60 px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-neon/40"
+          >
+            <Share2 className="h-4 w-4" /> Compartir mi posición
+          </button>
+        )}
+
 
         <div className="overflow-hidden rounded-2xl border border-border bg-card" style={{ backgroundImage: "var(--gradient-card)" }}>
           {rows.length === 0 && <div className="p-6 text-center text-sm text-muted-foreground">Aún no hay miembros.</div>}
