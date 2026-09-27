@@ -76,7 +76,7 @@ function ProfilePage() {
   const signOut = async () => {
     await supabase.auth.signOut();
     toast.success("Hasta luego");
-    navigate({ to: "/auth", replace: true });
+    navigate({ to: "/auth", search: { ref: undefined }, replace: true });
   };
 
   return (
