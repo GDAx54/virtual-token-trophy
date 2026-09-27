@@ -7,7 +7,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth", search: {}, replace: true });
+    if (!loading && !user) navigate({ to: "/auth", search: { ref: undefined }, replace: true });
   }, [loading, user, navigate]);
 
   if (loading || !user) {
