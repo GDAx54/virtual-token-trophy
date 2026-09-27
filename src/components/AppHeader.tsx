@@ -4,6 +4,7 @@ import { Euro, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 import { useActiveLeague } from "@/hooks/use-active-league";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import logoAsset from "@/assets/logo_90x.png.asset.json";
 
 interface LeagueInfo { id: string; name: string; bankroll: number }
@@ -39,7 +40,7 @@ export function AppHeader({ subtitle }: { subtitle?: string }) {
   }, [user, leagueId]);
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-background/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-20 border-b border-border/70 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-5 py-4">
         <Link to="/" className="min-w-0">
           <img
@@ -52,21 +53,24 @@ export function AppHeader({ subtitle }: { subtitle?: string }) {
           </p>
         </Link>
 
-        {league ? (
-          <div className="flex items-center gap-2 rounded-full border border-neon/30 bg-neon/10 px-3 py-1.5">
-            <Euro className="h-4 w-4 text-neon" />
-            <span className="text-sm font-bold text-neon">
-              {league.bankroll.toLocaleString()}
-            </span>
-          </div>
-        ) : (
-          <Link
-            to="/leagues"
-            className="flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
-          >
-            <Trophy className="h-3.5 w-3.5" /> Elegir liga
-          </Link>
-        )}
+        <div className="flex shrink-0 items-center gap-2">
+          {league ? (
+            <div className="flex items-center gap-2 rounded-full border border-neon/30 bg-neon/10 px-3 py-1.5">
+              <Euro className="h-4 w-4 text-neon" />
+              <span className="text-sm font-bold text-neon">
+                {league.bankroll.toLocaleString()}
+              </span>
+            </div>
+          ) : (
+            <Link
+              to="/leagues"
+              className="flex items-center gap-1.5 rounded-full border border-border bg-card/70 px-3 py-1.5 text-xs text-muted-foreground shadow-sm hover:text-foreground"
+            >
+              <Trophy className="h-3.5 w-3.5" /> Elegir liga
+            </Link>
+          )}
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

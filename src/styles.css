@@ -38,22 +38,51 @@
 
 :root {
   --radius: 0.75rem;
-  /* Dark by default — trading × esports vibe */
+  --background: oklch(0.975 0.006 150);
+  --foreground: oklch(0.20 0.025 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.20 0.025 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.20 0.025 260);
+  --primary: oklch(0.62 0.18 145);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.93 0.014 150);
+  --secondary-foreground: oklch(0.22 0.03 260);
+  --muted: oklch(0.94 0.008 250);
+  --muted-foreground: oklch(0.48 0.025 260);
+  --accent: oklch(0.58 0.22 330);
+  --accent-foreground: oklch(0.99 0 0);
+  --destructive: oklch(0.65 0.25 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.82 0.015 250 / 55%);
+  --input: oklch(0.82 0.015 250 / 70%);
+  --ring: oklch(0.62 0.18 145);
+  --neon: oklch(0.58 0.18 145);
+  --neon-foreground: oklch(0.99 0 0);
+  --magenta: oklch(0.58 0.22 330);
+
+  --gradient-neon: linear-gradient(135deg, oklch(0.62 0.18 145), oklch(0.58 0.22 330));
+  --gradient-card: linear-gradient(160deg, oklch(1 0 0), oklch(0.975 0.006 150));
+  --shadow-glow: 0 0 24px -10px oklch(0.62 0.18 145 / 0.45);
+  --shadow-magenta: 0 0 24px -10px oklch(0.58 0.22 330 / 0.35);
+  --shadow-dock: 0 14px 38px -16px oklch(0.20 0.025 260 / 0.28);
+}
+
+.dark {
   --background: oklch(0.16 0.02 270);
   --foreground: oklch(0.98 0.005 250);
   --card: oklch(0.21 0.025 270);
   --card-foreground: oklch(0.98 0.005 250);
   --popover: oklch(0.21 0.025 270);
   --popover-foreground: oklch(0.98 0.005 250);
-  --primary: oklch(0.85 0.22 145);            /* neon green */
+  --primary: oklch(0.85 0.22 145);
   --primary-foreground: oklch(0.16 0.02 270);
   --secondary: oklch(0.28 0.04 270);
   --secondary-foreground: oklch(0.98 0.005 250);
   --muted: oklch(0.26 0.03 270);
   --muted-foreground: oklch(0.72 0.03 260);
-  --accent: oklch(0.72 0.28 330);             /* magenta */
+  --accent: oklch(0.72 0.28 330);
   --accent-foreground: oklch(0.16 0.02 270);
-  --destructive: oklch(0.65 0.25 25);
   --destructive-foreground: oklch(0.98 0.005 250);
   --border: oklch(1 0 0 / 8%);
   --input: oklch(1 0 0 / 12%);
@@ -61,17 +90,17 @@
   --neon: oklch(0.88 0.24 145);
   --neon-foreground: oklch(0.16 0.02 270);
   --magenta: oklch(0.72 0.28 330);
-
   --gradient-neon: linear-gradient(135deg, oklch(0.85 0.22 145), oklch(0.72 0.28 330));
-  --gradient-card: linear-gradient(160deg, oklch(0.23 0.03 270) 0%, oklch(0.19 0.025 275) 100%);
+  --gradient-card: linear-gradient(160deg, oklch(0.23 0.03 270), oklch(0.19 0.025 275));
   --shadow-glow: 0 0 32px -8px oklch(0.85 0.22 145 / 0.5);
   --shadow-magenta: 0 0 32px -8px oklch(0.72 0.28 330 / 0.45);
+  --shadow-dock: 0 18px 48px -14px oklch(0.02 0.01 270 / 0.85);
 }
 
 @layer base {
   * { border-color: var(--color-border); }
   html {
-    color-scheme: dark;
+    color-scheme: light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -82,16 +111,14 @@
     font-family: var(--font-sans);
     font-feature-settings: "ss01";
     font-variant-numeric: lining-nums proportional-nums;
-    letter-spacing: -0.01em;
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.72 0.28 330 / 0.14), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 100%, oklch(0.85 0.22 145 / 0.12), transparent);
+    letter-spacing: 0;
     min-height: 100vh;
   }
+  html.dark { color-scheme: dark; }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     font-variant-numeric: lining-nums proportional-nums;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
     font-weight: 700;
   }
   /* Fluid type scale */

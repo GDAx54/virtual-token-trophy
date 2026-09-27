@@ -12,8 +12,8 @@ const TABS = [
 export function TabBar() {
   const { pathname } = useLocation();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-background/85 backdrop-blur-xl">
-      <div className="mx-auto grid max-w-3xl grid-cols-4">
+    <nav className="pointer-events-none fixed inset-x-0 bottom-0 z-30 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <div className="pointer-events-auto mx-auto grid max-w-md grid-cols-4 gap-1 rounded-[1.35rem] border border-border/80 bg-card/90 p-1.5 shadow-[var(--shadow-dock)] backdrop-blur-xl">
         {TABS.map(({ to, label, icon: Icon }) => {
           const active = pathname === to;
           return (
@@ -21,13 +21,17 @@ export function TabBar() {
               key={to}
               to={to}
               className={cn(
-                "flex flex-col items-center gap-1 py-3 text-[10px] uppercase tracking-widest transition-colors",
-                active ? "text-neon" : "text-muted-foreground hover:text-foreground",
+                "relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition-all active:scale-95",
+                active
+                  ? "bg-neon/12 text-neon"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
+              aria-current={active ? "page" : undefined}
             >
-              <Icon className="h-4 w-4" />
+              <span className={cn("grid h-6 w-8 place-items-center rounded-full transition-colors", active && "bg-neon/12")}>
+                <Icon className={cn("h-[18px] w-[18px]", active && "stroke-[2.4]")} />
+              </span>
               {label}
-              {active && <span className="h-0.5 w-6 rounded-full bg-neon shadow-[var(--shadow-glow)]" />}
             </Link>
           );
         })}
