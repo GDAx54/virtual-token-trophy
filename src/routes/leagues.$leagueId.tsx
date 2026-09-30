@@ -8,6 +8,7 @@ import { useActiveLeague } from "@/hooks/use-active-league";
 import { RequireAuth } from "@/components/RequireAuth";
 import { TabBar } from "@/components/TabBar";
 import { cn } from "@/lib/utils";
+import { PlayerStatsDialog } from "@/components/PlayerStatsDialog";
 
 export const Route = createFileRoute("/leagues/$leagueId")({
   head: () => ({
@@ -32,6 +33,7 @@ function LeagueDetailPage() {
   const [copied, setCopied] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [leaving, setLeaving] = useState(false);
+  const [selected, setSelected] = useState<number | null>(null);
 
   const leaveLeague = async () => {
     if (!user || leaving) return;
@@ -258,10 +260,12 @@ function LeagueDetailPage() {
                     amount: "text-neon",
                   };
             return (
-              <div
+              <button
+                type="button"
                 key={r.user_id}
+                onClick={() => setSelected(idx)}
                 className={cn(
-                  "flex items-center gap-3 border-b border-border/50 px-4 py-3 last:border-0 transition-colors",
+                  "flex w-full items-center gap-3 border-b border-border/50 px-4 py-3 text-left last:border-0 transition-colors hover:bg-muted/40",
                   podium.row,
                   isMe && "ring-1 ring-inset ring-neon/40",
                 )}
@@ -288,7 +292,7 @@ function LeagueDetailPage() {
                     {r.bankroll.toLocaleString()} €
                   </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
@@ -328,6 +332,13 @@ function LeagueDetailPage() {
         </div>
       )}
 
+      <PlayerStatsDialog
+        leagueId={leagueId}
+        player={selected !== null ? rows[selected] ?? null : null}
+        rank={(selected ?? 0) + 1}
+        totalPlayers={rows.length}
+        onClose={() => setSelected(null)}
+      />
       <TabBar />
     </div>
   );
