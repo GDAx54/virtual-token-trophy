@@ -40,7 +40,7 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
   useEffect(() => {
     setKickoff(new Date(match.kickoff_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
     setKickoffDate(
-      new Date(match.kickoff_at).toLocaleDateString([], { weekday: "short", day: "numeric", month: "short" })
+      new Date(match.kickoff_at).toLocaleDateString("es", { weekday: "short", day: "numeric", month: "short" })
     );
   }, [match.kickoff_at]);
 
