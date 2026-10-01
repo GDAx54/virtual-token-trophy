@@ -36,8 +36,12 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
 
   // Hydration-safe time: render after mount only
   const [kickoff, setKickoff] = useState("");
+  const [kickoffDate, setKickoffDate] = useState("");
   useEffect(() => {
     setKickoff(new Date(match.kickoff_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+    setKickoffDate(
+      new Date(match.kickoff_at).toLocaleDateString("es", { weekday: "short", day: "numeric", month: "short" })
+    );
   }, [match.kickoff_at]);
 
   const { mainOdds, extras } = useMemo(() => {
@@ -93,7 +97,9 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
             </span>
           ) : (
             <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" /> <span suppressHydrationWarning>{kickoff || "--:--"}</span>
+              <Clock className="h-3 w-3" />
+              <span suppressHydrationWarning>{kickoffDate || "—"}</span>
+              <span suppressHydrationWarning>· {kickoff || "--:--"}</span>
             </span>
           )}
         </span>
