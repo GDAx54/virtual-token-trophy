@@ -79,18 +79,34 @@ async function handler({ request }: { request: Request }) {
   const start = new Date();
   start.setUTCDate(start.getUTCDate() - 2);
   const end = new Date();
-  end.setUTCDate(end.getUTCDate() + 30);
+  end.setUTCDate(end.getUTCDate() + 28);
 
-  const dates = `${ymdCompact(start)}-${ymdCompact(end)}`;
-  const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LEAGUE}/scoreboard?dates=${dates}&limit=200`;
-  const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "90x/1.0" } });
-
-  if (!res.ok) {
-    return Response.json({ ok: false, error: `ESPN respondió ${res.status}` }, { status: 502 });
+  const months = new Set<string>();
+  const now = new Date();
+  for (const offset of [-1, 0, 1]) {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + offset, 1));
+    months.add(`${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}`);
   }
 
-  const data = (await res.json()) as EspnScoreboard;
-  const events = data.events ?? [];
+  const byId = new Map<string, EspnEvent>();
+  let okResponses = 0;
+  for (const month of months) {
+    const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LEAGUE}/scoreboard?dates=${month}&limit=200`;
+    const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "90x/1.0" } });
+    if (!res.ok) {
+      console.error("[sync-matches] ESPN", month, res.status);
+      continue;
+    }
+    okResponses++;
+    const data = (await res.json()) as EspnScoreboard;
+    for (const ev of data.events ?? []) byId.set(ev.id, ev);
+  }
+
+  if (okResponses === 0) {
+    return Response.json({ ok: false, error: "ESPN no respondió" }, { status: 502 });
+  }
+
+  const events = [...byId.values()];
 
   let upserted = 0;
   let marketsSynced = 0;
