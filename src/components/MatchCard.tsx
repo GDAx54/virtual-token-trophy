@@ -97,7 +97,9 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
             </span>
           ) : (
             <span className="flex items-center gap-1">
-              <Clock className="h-3 w-3" /> <span suppressHydrationWarning>{kickoff || "--:--"}</span>
+              <Clock className="h-3 w-3" />
+              <span suppressHydrationWarning>{kickoffDate || "—"}</span>
+              <span suppressHydrationWarning>· {kickoff || "--:--"}</span>
             </span>
           )}
         </span>
