@@ -79,7 +79,7 @@ async function handler({ request }: { request: Request }) {
   const start = new Date();
   start.setUTCDate(start.getUTCDate() - 2);
   const end = new Date();
-  end.setUTCDate(end.getUTCDate() + 30);
+  end.setUTCDate(end.getUTCDate() + 28);
 
   const months = new Set<string>();
   const now = new Date();
