@@ -32,7 +32,7 @@ function HomePage() {
       const { data: rows, error } = await supabase
         .from("matches")
         .select("id, home_team, away_team, kickoff_at, status, score, markets(id, category, label, selection, odds)")
-        .in("status", ["scheduled", "live"])
+        .or(`status.eq.live,and(status.eq.scheduled,kickoff_at.gte.${new Date(Date.now() - 3 * 3600 * 1000).toISOString()})`)
         .order("kickoff_at", { ascending: true });
       if (!mounted) return;
       if (error) toast.error(error.message);
