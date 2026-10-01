@@ -88,6 +88,20 @@ async function handler({ request }: { request: Request }) {
     months.add(`${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}`);
   }
 
+  // Incluir meses antiguos con partidos pasados que aún no se han cerrado
+  const { data: overdue } = await supabaseAdmin
+    .from("matches")
+    .select("kickoff_at")
+    .eq("tournament_id", TOURNAMENT_ID)
+    .in("status", ["scheduled", "live"])
+    .lt("kickoff_at", new Date(Date.now() - 3 * 3600 * 1000).toISOString())
+    .limit(500);
+  for (const row of (overdue ?? []) as { kickoff_at: string }[]) {
+    const d = new Date(row.kickoff_at);
+    months.add(`${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}`);
+  }
+
+
   const byId = new Map<string, EspnEvent>();
   let okResponses = 0;
   for (const month of months) {
