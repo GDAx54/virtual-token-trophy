@@ -1,14 +1,23 @@
-import { ReactNode, useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { ReactNode, useEffect, useRef } from "react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/use-session";
 
+// Si no hay sesión, crea un jugador invitado (UUID anónimo) en segundo plano.
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { user, loading } = useSession();
-  const navigate = useNavigate();
+  const started = useRef(false);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth", search: { ref: undefined }, replace: true });
-  }, [loading, user, navigate]);
+    if (loading || user || started.current) return;
+    started.current = true;
+    supabase.auth.signInAnonymously().then(({ error }) => {
+      if (error) {
+        started.current = false;
+        toast.error("No se pudo crear tu perfil de invitado", { description: error.message });
+      }
+    });
+  }, [loading, user]);
 
   if (loading || !user) {
     return (
