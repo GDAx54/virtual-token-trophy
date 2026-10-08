@@ -173,6 +173,7 @@ async function handler({ request }: { request: Request }) {
   }
 
   const staleClosed = await closeStaleMatches(supabaseAdmin, syncStartedAt, start.toISOString(), end.toISOString());
+  const challengesSettled = await settlePendingChallenges(supabaseAdmin);
 
   return Response.json({
     ok: true,
@@ -182,6 +183,7 @@ async function handler({ request }: { request: Request }) {
     marketsSynced,
     matchesSettled,
     staleClosed,
+    challengesSettled,
     tournament: TOURNAMENT_ID,
   });
 }
@@ -297,4 +299,22 @@ async function closeStaleMatches(supabaseAdmin: any, syncStartedAt: string, star
   await supabaseAdmin.from("markets").update({ is_open: false }).in("match_id", staleIds);
   await supabaseAdmin.from("matches").update({ status: "cancelled", updated_at: new Date().toISOString() }).in("id", staleIds);
   return staleIds.length;
+}
+
+// Retos: liquida (o anula) los retos pendientes de partidos ya cerrados. Idempotente.
+async function settlePendingChallenges(supabaseAdmin: any) {
+  const { data } = await supabaseAdmin
+    .from("match_challenges")
+    .select("match_id, matches!inner(status)")
+    .eq("status", "pending")
+    .in("matches.status", ["finished", "cancelled"])
+    .limit(1000);
+  const ids = Array.from(new Set(((data ?? []) as { match_id: string }[]).map((r) => r.match_id)));
+  let n = 0;
+  for (const id of ids) {
+    const { data: count, error } = await supabaseAdmin.rpc("settle_challenges", { _match_id: id });
+    if (error) console.error("[sync-matches] settle_challenges", id, error.message);
+    else n += (count as number) ?? 0;
+  }
+  return n;
 }
