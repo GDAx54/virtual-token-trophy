@@ -9,6 +9,7 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { MatchCard, type MatchRow } from "@/components/MatchCard";
+import { ChallengeDialog, type ChallengeRow } from "@/components/ChallengeDialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,6 +26,24 @@ function HomePage() {
   const { leagueId } = useActiveLeague();
   const [matches, setMatches] = useState<MatchRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [b0, setB0] = useState(0);
+  const [challenges, setChallenges] = useState<Record<string, ChallengeRow>>({});
+  const [challengeMatch, setChallengeMatch] = useState<MatchRow | null>(null);
+
+  const loadChallenges = async () => {
+    if (!leagueId || !user) { setChallenges({}); return; }
+    const [{ data: lg }, { data: rows }] = await Promise.all([
+      supabase.from("leagues").select("starting_bankroll").eq("id", leagueId).maybeSingle(),
+      supabase.from("match_challenges")
+        .select("id, match_id, kind, selection, wildcard, status, theoretical_prize, awarded_prize, cap_note")
+        .eq("league_id", leagueId).eq("user_id", user.id),
+    ]);
+    setB0(Number(lg?.starting_bankroll ?? 0));
+    const map: Record<string, ChallengeRow> = {};
+    for (const r of (rows ?? []) as unknown as ChallengeRow[]) map[r.match_id] = r;
+    setChallenges(map);
+  };
+  useEffect(() => { loadChallenges(); }, [leagueId, user?.id]);
 
   useEffect(() => {
     let mounted = true;
@@ -95,11 +114,24 @@ function HomePage() {
         ) : (
           <div className="space-y-4">
             {matches.map((m, i) => (
-              <MatchCard key={m.id} match={m} hot={i === 0} onPlaceBet={placeBet} />
+              <MatchCard key={m.id} match={m} hot={i === 0} onPlaceBet={placeBet}
+                challenge={leagueId ? challenges[m.id] ?? null : undefined}
+                onOpenChallenge={leagueId ? () => setChallengeMatch(m) : undefined} />
             ))}
           </div>
         )}
       </main>
+      {challengeMatch && leagueId && (
+        <ChallengeDialog
+          open={!!challengeMatch}
+          onClose={() => setChallengeMatch(null)}
+          leagueId={leagueId}
+          b0={b0}
+          match={challengeMatch}
+          existing={challenges[challengeMatch.id]}
+          onSaved={loadChallenges}
+        />
+      )}
       <TabBar />
     </div>
   );
