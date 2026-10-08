@@ -7,6 +7,13 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { cn } from "@/lib/utils";
+import { CHALLENGE_LABELS, describeSelection, type ChallengeKind } from "@/lib/challenges";
+
+interface ChallengeActivity {
+  id: string; kind: ChallengeKind; selection: any; status: string; wildcard: boolean;
+  theoretical_prize: number | null; awarded_prize: number; cap_note: string | null;
+  matches: { home_team: { name: string }; away_team: { name: string } } | null;
+}
 
 export const Route = createFileRoute("/bets")({
   head: () => ({
@@ -32,6 +39,14 @@ interface BetRow {
 function BetsPage() {
   const { user } = useSession();
   const [bets, setBets] = useState<BetRow[]>([]);
+  const [retos, setRetos] = useState<ChallengeActivity[]>([]);
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("match_challenges")
+      .select("id, kind, selection, status, wildcard, theoretical_prize, awarded_prize, cap_note, matches(home_team, away_team)")
+      .eq("user_id", user.id).order("updated_at", { ascending: false }).limit(30)
+      .then(({ data }) => setRetos((data ?? []) as unknown as ChallengeActivity[]));
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -65,6 +80,32 @@ function BetsPage() {
           <div className="space-y-3">
             {bets.map((b) => <BetRowCard key={b.id} bet={b} />)}
           </div>
+        )}
+        {retos.length > 0 && (
+          <section className="mt-8">
+            <h2 className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">Retos</h2>
+            <div className="space-y-2">
+              {retos.map((r) => {
+                const h = r.matches?.home_team.name ?? "Local", a = r.matches?.away_team.name ?? "Visitante";
+                const what = describeSelection(r.kind, r.selection, h, a);
+                const msg = r.status === "won" ? `Acertaste ${what}: +${r.awarded_prize} €`
+                  : r.status === "lost" ? `Fallaste ${what}`
+                  : r.status === "void" ? `Anulado: ${what}` : `Pendiente: ${what}`;
+                return (
+                  <div key={r.id} className="rounded-xl border border-border bg-card/60 p-3 text-sm">
+                    <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-muted-foreground">
+                      <span>{CHALLENGE_LABELS[r.kind]}</span>
+                      {r.wildcard && <span className="rounded-full bg-accent/15 px-2 py-0.5 text-accent">Comodín ×2</span>}
+                    </div>
+                    <div className={cn("mt-1", r.status === "won" && "text-neon", r.status === "lost" && "text-destructive")}>{msg}</div>
+                    {r.cap_note && r.status === "won" && (
+                      <div className="mt-1 text-xs text-muted-foreground">Premio {r.theoretical_prize} € · {r.cap_note}</div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
         )}
       </main>
       <TabBar />

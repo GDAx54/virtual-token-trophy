@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, Flame, Clock } from "lucide-react";
+import { ChevronDown, Flame, Clock, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { potentialPayout } from "@/lib/betting";
 import { flagFor } from "@/lib/flags";
@@ -26,9 +26,12 @@ interface Props {
   match: MatchRow;
   hot?: boolean;
   onPlaceBet: (params: { marketId: string; odds: number; label: string; stake: number }) => Promise<void> | void;
+  /** Estado del reto del usuario en este partido (si hay liga activa). */
+  challenge?: { status: string; wildcard: boolean; awarded_prize: number } | null;
+  onOpenChallenge?: () => void;
 }
 
-export function MatchCard({ match, hot, onPlaceBet }: Props) {
+export function MatchCard({ match, hot, onPlaceBet, challenge, onOpenChallenge }: Props) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<{ id: string; odds: number; label: string } | null>(null);
   const [stake, setStake] = useState(100);
@@ -127,6 +130,22 @@ export function MatchCard({ match, hot, onPlaceBet }: Props) {
         <Odds label="2" market={mainOdds.away} active={selected?.id === mainOdds.away?.id}
               onClick={() => pick(mainOdds.away, `${match.away_team.short} gana`)} />
       </div>
+
+      {onOpenChallenge && (
+        <button
+          onClick={onOpenChallenge}
+          disabled={match.status !== "scheduled" && !challenge}
+          className="mt-3 flex w-full items-center justify-between rounded-lg border border-border/60 px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-neon/40 hover:text-foreground disabled:opacity-40"
+        >
+          <span className="flex items-center gap-1.5"><Target className="h-4 w-4" /> Reto</span>
+          <span className="flex items-center gap-1.5 text-xs">
+            {challenge?.wildcard && <span className="rounded-full bg-accent/15 px-2 py-0.5 text-accent">Comodín ×2</span>}
+            {!challenge ? "Sin seleccionar" : challenge.status === "pending" ? "Pendiente"
+              : challenge.status === "won" ? `Acertado · +${challenge.awarded_prize} €`
+              : challenge.status === "lost" ? "Fallado" : "Anulado"}
+          </span>
+        </button>
+      )}
 
       {extras.length > 0 && (
         <>

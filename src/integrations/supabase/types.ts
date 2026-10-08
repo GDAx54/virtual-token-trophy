@@ -219,6 +219,87 @@ export type Database = {
           },
         ]
       }
+      match_challenges: {
+        Row: {
+          awarded_prize: number
+          base_bankroll: number
+          base_pct: number
+          cap_note: string | null
+          created_at: string
+          id: string
+          kind: string
+          league_id: string
+          match_id: string
+          multiplier: number
+          period_key: string
+          rules_version: number
+          selection: Json
+          settled_at: string | null
+          status: string
+          theoretical_prize: number | null
+          updated_at: string
+          user_id: string
+          wildcard: boolean
+        }
+        Insert: {
+          awarded_prize?: number
+          base_bankroll: number
+          base_pct: number
+          cap_note?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          league_id: string
+          match_id: string
+          multiplier?: number
+          period_key: string
+          rules_version: number
+          selection: Json
+          settled_at?: string | null
+          status?: string
+          theoretical_prize?: number | null
+          updated_at?: string
+          user_id: string
+          wildcard?: boolean
+        }
+        Update: {
+          awarded_prize?: number
+          base_bankroll?: number
+          base_pct?: number
+          cap_note?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          league_id?: string
+          match_id?: string
+          multiplier?: number
+          period_key?: string
+          rules_version?: number
+          selection?: Json
+          settled_at?: string | null
+          status?: string
+          theoretical_prize?: number | null
+          updated_at?: string
+          user_id?: string
+          wildcard?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_challenges_league_id_fkey"
+            columns: ["league_id"]
+            isOneToOne: false
+            referencedRelation: "leagues"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_challenges_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       matches: {
         Row: {
           away_team: Json
@@ -321,6 +402,13 @@ export type Database = {
     }
     Functions: {
       apply_referral: { Args: { _ref_username: string }; Returns: Json }
+      challenge_config: { Args: never; Returns: Json }
+      challenge_hit: {
+        Args: { _a: number; _h: number; _kind: string; _sel: Json }
+        Returns: boolean
+      }
+      challenge_pct: { Args: { _kind: string; _sel: Json }; Returns: number }
+      challenge_validate: { Args: { _kind: string; _sel: Json }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -337,7 +425,22 @@ export type Database = {
         Args: { _league_id: string; _market_ids: string[]; _stake: number }
         Returns: string
       }
+      remove_challenge: {
+        Args: { _league_id: string; _match_id: string }
+        Returns: undefined
+      }
+      settle_challenges: { Args: { _match_id: string }; Returns: number }
       settle_match: { Args: { _match_id: string }; Returns: number }
+      submit_challenge: {
+        Args: {
+          _kind: string
+          _league_id: string
+          _match_id: string
+          _selection: Json
+          _wildcard: boolean
+        }
+        Returns: string
+      }
       upsert_match: {
         Args: {
           _away: Json
