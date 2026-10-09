@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, Flame, Clock, Target } from "lucide-react";
+import { Flame, Clock, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { potentialPayout } from "@/lib/betting";
 import { flagFor } from "@/lib/flags";
@@ -32,7 +32,6 @@ interface Props {
 }
 
 export function MatchCard({ match, hot, onPlaceBet, challenge, onOpenChallenge }: Props) {
-  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<{ id: string; odds: number; label: string } | null>(null);
   const [stake, setStake] = useState(100);
   const [busy, setBusy] = useState(false);
@@ -47,16 +46,12 @@ export function MatchCard({ match, hot, onPlaceBet, challenge, onOpenChallenge }
     );
   }, [match.kickoff_at]);
 
-  const { mainOdds, extras } = useMemo(() => {
+  const mainOdds = useMemo(() => {
     const main = match.markets.filter((m) => m.category === "1X2");
-    const extra = match.markets.filter((m) => m.category !== "1X2");
     return {
-      mainOdds: {
-        home: main.find((m) => m.selection === "home"),
-        draw: main.find((m) => m.selection === "draw"),
-        away: main.find((m) => m.selection === "away"),
-      },
-      extras: extra,
+      home: main.find((m) => m.selection === "home"),
+      draw: main.find((m) => m.selection === "draw"),
+      away: main.find((m) => m.selection === "away"),
     };
   }, [match.markets]);
 
@@ -147,33 +142,6 @@ export function MatchCard({ match, hot, onPlaceBet, challenge, onOpenChallenge }
         </button>
       )}
 
-      {extras.length > 0 && (
-        <>
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className="mt-4 flex w-full items-center justify-between rounded-lg border border-border/60 px-3 py-2 text-sm text-muted-foreground transition-colors hover:border-neon/40 hover:text-foreground"
-          >
-            <span>Ver más mercados ({extras.length})</span>
-            <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />
-          </button>
-
-          {open && (
-            <div className="mt-3 space-y-3">
-              {groupBy(extras, (e) => e.category).map(([cat, items]) => (
-                <div key={cat}>
-                  <div className="mb-1.5 text-[10px] uppercase tracking-widest text-muted-foreground">{cat}</div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {items.map((m) => (
-                      <Odds key={m.id} label={m.label} market={m} compact active={selected?.id === m.id}
-                            onClick={() => pick(m, `${cat} · ${m.label}`)} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </>
-      )}
 
       {selected && (
         <div className="mt-4 rounded-xl border border-neon/30 bg-background/60 p-3">
@@ -254,13 +222,3 @@ function Odds({ label, market, active, onClick, compact }: {
   );
 }
 
-function groupBy<T>(arr: T[], key: (t: T) => string): [string, T[]][] {
-  const m = new Map<string, T[]>();
-  for (const item of arr) {
-    const k = key(item);
-    const v = m.get(k) ?? [];
-    v.push(item);
-    m.set(k, v);
-  }
-  return Array.from(m.entries());
-}
