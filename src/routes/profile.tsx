@@ -7,6 +7,7 @@ import { useSession } from "@/hooks/use-session";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
+import { AchievementsShowcase } from "@/components/AchievementsShowcase";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -129,6 +130,8 @@ function ProfilePage() {
             </button>
           </div>
         </section>
+
+        {user && <AchievementsShowcase userId={user.id} />}
 
         <button
           onClick={signOut}
