@@ -342,10 +342,12 @@ export type Database = {
           bankroll: number
           created_at: string
           display_name: string | null
+          featured_badges: string[]
           id: string
           referral_bonus: number
           referred_by: string | null
           rescues_used: number
+          title: string | null
           total_won: number
           updated_at: string
           username: string
@@ -355,10 +357,12 @@ export type Database = {
           bankroll?: number
           created_at?: string
           display_name?: string | null
+          featured_badges?: string[]
           id: string
           referral_bonus?: number
           referred_by?: string | null
           rescues_used?: number
+          title?: string | null
           total_won?: number
           updated_at?: string
           username: string
@@ -368,10 +372,12 @@ export type Database = {
           bankroll?: number
           created_at?: string
           display_name?: string | null
+          featured_badges?: string[]
           id?: string
           referral_bonus?: number
           referred_by?: string | null
           rescues_used?: number
+          title?: string | null
           total_won?: number
           updated_at?: string
           username?: string

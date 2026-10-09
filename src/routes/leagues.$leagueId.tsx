@@ -9,6 +9,7 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { TabBar } from "@/components/TabBar";
 import { cn } from "@/lib/utils";
 import { PlayerStatsDialog } from "@/components/PlayerStatsDialog";
+import { achievementById } from "@/lib/achievements";
 
 export const Route = createFileRoute("/leagues/$leagueId")({
   head: () => ({
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/leagues/$leagueId")({
 });
 
 interface LeagueData { id: string; name: string; invite_code: string; starting_bankroll: number }
-interface MemberRow { user_id: string; bankroll: number; username: string; display_name: string | null }
+interface MemberRow { user_id: string; bankroll: number; username: string; display_name: string | null; title: string | null; featured_badges: string[] }
 
 function LeagueDetailPage() {
   const { leagueId } = Route.useParams();
@@ -73,7 +74,7 @@ function LeagueDetailPage() {
       if (cancelled || !mems) return;
       const ids = mems.map((m: any) => m.user_id);
       const { data: profs } = ids.length
-        ? await supabase.from("profiles").select("id, username, display_name").in("id", ids)
+        ? await supabase.from("profiles").select("id, username, display_name, title, featured_badges").in("id", ids)
         : { data: [] as any[] };
       const pmap = new Map((profs ?? []).map((p: any) => [p.id, p]));
       setRows(mems.map((m: any) => {
@@ -83,6 +84,8 @@ function LeagueDetailPage() {
           bankroll: Number(m.bankroll),
           username: p?.username ?? "—",
           display_name: p?.display_name ?? null,
+          title: p?.title ?? null,
+          featured_badges: p?.featured_badges ?? [],
         };
       }));
     };
@@ -281,9 +284,13 @@ function LeagueDetailPage() {
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-semibold">
                     {r.display_name || r.username}
+                    {r.featured_badges.length > 0 && (
+                      <span className="ml-1.5">{r.featured_badges.map((id) => achievementById(id)?.emoji).join("")}</span>
+                    )}
                     {isMe && <span className="ml-2 text-[10px] uppercase tracking-widest text-neon">tú</span>}
                   </div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <div className="truncate text-[10px] uppercase tracking-widest text-muted-foreground">
+                    {r.title ? <span className="text-neon">{r.title} · </span> : null}
                     @{r.username} {rank === 1 && "· 🥇"} {rank === 2 && "· 🥈"} {rank === 3 && "· 🥉"}
                   </div>
                 </div>

@@ -3,7 +3,9 @@ import { Flame, TrendingUp, Trophy, Target, Zap, Skull, Crown, Wallet } from "lu
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
-interface Player { user_id: string; bankroll: number; username: string; display_name: string | null }
+import { achievementById } from "@/lib/achievements";
+
+interface Player { user_id: string; bankroll: number; username: string; display_name: string | null; title?: string | null; featured_badges?: string[] }
 
 interface Stats {
   peak: number;
@@ -101,7 +103,20 @@ export function PlayerStatsDialog({
             {(player?.display_name || player?.username || "?").slice(0, 2).toUpperCase()}
           </div>
           <DialogTitle>{player?.display_name || player?.username}</DialogTitle>
+          {player?.title && <div className="text-xs font-semibold uppercase tracking-widest text-neon">{player.title}</div>}
           <DialogDescription>@{player?.username} · {rank}º de {totalPlayers}</DialogDescription>
+          {!!player?.featured_badges?.length && (
+            <div className="flex justify-center gap-2 pt-1">
+              {player.featured_badges.map((id) => {
+                const a = achievementById(id);
+                return a ? (
+                  <span key={id} title={a.desc} className="rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-semibold">
+                    {a.emoji} {a.name}
+                  </span>
+                ) : null;
+              })}
+            </div>
+          )}
         </DialogHeader>
 
         {!stats ? (
