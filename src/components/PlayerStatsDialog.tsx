@@ -95,8 +95,10 @@ export function PlayerStatsDialog({
     if (resolvedCount >= 5 && rate >= 60) badges.push("🧠 Oráculo");
   }
 
+  if (!player) return null;
+
   return (
-    <Dialog open={!!player} onOpenChange={(o) => !o && onClose()}>
+    <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-sm rounded-2xl">
         <DialogHeader className="items-center text-center">
           <div className="grid h-14 w-14 place-items-center rounded-full bg-neon text-lg font-bold text-neon-foreground">
