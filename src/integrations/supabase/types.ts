@@ -72,6 +72,7 @@ export type Database = {
           id: string
           league_id: string | null
           payout: number
+          period_start: string | null
           placed_at: string
           potential_payout: number
           resolved_at: string | null
@@ -84,6 +85,7 @@ export type Database = {
           id?: string
           league_id?: string | null
           payout?: number
+          period_start?: string | null
           placed_at?: string
           potential_payout: number
           resolved_at?: string | null
@@ -96,6 +98,7 @@ export type Database = {
           id?: string
           league_id?: string | null
           payout?: number
+          period_start?: string | null
           placed_at?: string
           potential_payout?: number
           resolved_at?: string | null
@@ -109,6 +112,35 @@ export type Database = {
             columns: ["league_id"]
             isOneToOne: false
             referencedRelation: "leagues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      duel_reactions: {
+        Row: {
+          created_at: string
+          duel_id: string
+          emoji: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duel_id: string
+          emoji: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duel_id?: string
+          emoji?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "duel_reactions_duel_id_fkey"
+            columns: ["duel_id"]
+            isOneToOne: false
+            referencedRelation: "weekly_duels"
             referencedColumns: ["id"]
           },
         ]
@@ -135,6 +167,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "league_members_league_id_fkey"
+            columns: ["league_id"]
+            isOneToOne: false
+            referencedRelation: "leagues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      league_ranks: {
+        Row: {
+          byes: number
+          draws: number
+          league_id: string
+          losses: number
+          rank: number
+          updated_at: string
+          user_id: string
+          win_streak: number
+          wins: number
+        }
+        Insert: {
+          byes?: number
+          draws?: number
+          league_id: string
+          losses?: number
+          rank?: number
+          updated_at?: string
+          user_id: string
+          win_streak?: number
+          wins?: number
+        }
+        Update: {
+          byes?: number
+          draws?: number
+          league_id?: string
+          losses?: number
+          rank?: number
+          updated_at?: string
+          user_id?: string
+          win_streak?: number
+          wins?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "league_ranks_league_id_fkey"
             columns: ["league_id"]
             isOneToOne: false
             referencedRelation: "leagues"
@@ -402,6 +478,98 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_duels: {
+        Row: {
+          created_at: string
+          id: string
+          league_id: string
+          net_a: number | null
+          net_b: number | null
+          outcome: string | null
+          period_end: string
+          period_key: string
+          period_start: string
+          played_a: boolean | null
+          played_b: boolean | null
+          player_a: string
+          player_b: string | null
+          rank_after_a: number | null
+          rank_after_b: number | null
+          rank_before_a: number | null
+          rank_before_b: number | null
+          ref_a: number
+          ref_b: number | null
+          resolved_at: string | null
+          ret_a: number | null
+          ret_b: number | null
+          status: string
+          taunt: string | null
+          winner: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          league_id: string
+          net_a?: number | null
+          net_b?: number | null
+          outcome?: string | null
+          period_end: string
+          period_key: string
+          period_start: string
+          played_a?: boolean | null
+          played_b?: boolean | null
+          player_a: string
+          player_b?: string | null
+          rank_after_a?: number | null
+          rank_after_b?: number | null
+          rank_before_a?: number | null
+          rank_before_b?: number | null
+          ref_a: number
+          ref_b?: number | null
+          resolved_at?: string | null
+          ret_a?: number | null
+          ret_b?: number | null
+          status?: string
+          taunt?: string | null
+          winner?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          league_id?: string
+          net_a?: number | null
+          net_b?: number | null
+          outcome?: string | null
+          period_end?: string
+          period_key?: string
+          period_start?: string
+          played_a?: boolean | null
+          played_b?: boolean | null
+          player_a?: string
+          player_b?: string | null
+          rank_after_a?: number | null
+          rank_after_b?: number | null
+          rank_before_a?: number | null
+          rank_before_b?: number | null
+          ref_a?: number
+          ref_b?: number | null
+          resolved_at?: string | null
+          ret_a?: number | null
+          ret_b?: number | null
+          status?: string
+          taunt?: string | null
+          winner?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weekly_duels_league_id_fkey"
+            columns: ["league_id"]
+            isOneToOne: false
+            referencedRelation: "leagues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -415,6 +583,16 @@ export type Database = {
       }
       challenge_pct: { Args: { _kind: string; _sel: Json }; Returns: number }
       challenge_validate: { Args: { _kind: string; _sel: Json }; Returns: Json }
+      create_weekly_duels: { Args: never; Returns: number }
+      duel_apply_rank: {
+        Args: { _delta: number; _league: string; _user: string }
+        Returns: Record<string, unknown>
+      }
+      duel_live: { Args: { _duel: string }; Returns: Json }
+      duel_perf: {
+        Args: { _league: string; _start: string; _user: string }
+        Returns: Record<string, unknown>
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -431,8 +609,17 @@ export type Database = {
         Args: { _league_id: string; _market_ids: string[]; _stake: number }
         Returns: string
       }
+      react_duel: {
+        Args: { _duel: string; _emoji: string }
+        Returns: undefined
+      }
       remove_challenge: {
         Args: { _league_id: string; _match_id: string }
+        Returns: undefined
+      }
+      resolve_weekly_duels: { Args: never; Returns: number }
+      set_duel_taunt: {
+        Args: { _duel: string; _text: string }
         Returns: undefined
       }
       settle_challenges: { Args: { _match_id: string }; Returns: number }
@@ -459,6 +646,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      week_start: { Args: { _t: string }; Returns: string }
     }
     Enums: {
       app_role: "user" | "admin"
