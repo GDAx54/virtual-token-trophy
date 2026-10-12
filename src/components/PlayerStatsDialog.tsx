@@ -134,7 +134,7 @@ export function PlayerStatsDialog({
               </div>
             )}
             <div className="grid grid-cols-2 gap-2">
-              <Tile icon={<Wallet className="h-3.5 w-3.5" />} label="Dinero actual" value={eur(player!.bankroll)} sub={undefined} highlight />
+              <Tile icon={<Wallet className="h-3.5 w-3.5" />} label="Dinero actual" value={eur(player!.bankroll)} highlight />
               <div className="col-span-2 -mt-1 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">{eur(player!.bankroll)} · <RankBadge rank={player!.rank ?? 0} leagueName={leagueName} /></div>
               <Tile icon={<Crown className="h-3.5 w-3.5" />} label="Máximo alcanzado" value={eur(stats.peak)} />
               <Tile icon={<TrendingUp className="h-3.5 w-3.5" />} label="Ganado en total" value={eur(stats.netWon)} />
