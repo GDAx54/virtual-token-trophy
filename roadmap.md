@@ -7,3 +7,4 @@
 - [x] Verify bottom navigation on mobile in light and dark themes.
 - [x] Retos individuales por partido (5 tipos), comodín y tope semanal.
 - [ ] Quiniela de tres — bloqueada: la fuente de resultados no da el número de jornada.
+- [x] Duelos semanales con rangos por liga (semana lunes-domingo).

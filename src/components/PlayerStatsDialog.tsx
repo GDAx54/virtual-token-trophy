@@ -3,9 +3,10 @@ import { Flame, TrendingUp, Trophy, Target, Zap, Skull, Crown, Wallet } from "lu
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
+import { RankBadge } from "@/components/RankBadge";
 import { achievementById } from "@/lib/achievements";
 
-interface Player { user_id: string; bankroll: number; username: string; display_name: string | null; title?: string | null; featured_badges?: string[] }
+interface Player { user_id: string; bankroll: number; username: string; display_name: string | null; title?: string | null; featured_badges?: string[]; rank?: number }
 
 interface Stats {
   peak: number;
@@ -23,8 +24,8 @@ interface Stats {
 }
 
 export function PlayerStatsDialog({
-  leagueId, player, rank, totalPlayers, onClose,
-}: { leagueId: string; player: Player | null; rank: number; totalPlayers: number; onClose: () => void }) {
+  leagueId, leagueName, player, rank, totalPlayers, onClose,
+}: { leagueId: string; leagueName?: string; player: Player | null; rank: number; totalPlayers: number; onClose: () => void }) {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
@@ -134,6 +135,7 @@ export function PlayerStatsDialog({
             )}
             <div className="grid grid-cols-2 gap-2">
               <Tile icon={<Wallet className="h-3.5 w-3.5" />} label="Dinero actual" value={eur(player!.bankroll)} highlight />
+              <div className="col-span-2 -mt-1 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">{eur(player!.bankroll)} · <RankBadge rank={player!.rank ?? 0} leagueName={leagueName} /></div>
               <Tile icon={<Crown className="h-3.5 w-3.5" />} label="Máximo alcanzado" value={eur(stats.peak)} />
               <Tile icon={<TrendingUp className="h-3.5 w-3.5" />} label="Ganado en total" value={eur(stats.netWon)} />
               <Tile icon={<Target className="h-3.5 w-3.5" />} label="% de acierto" value={resolvedCount ? `${rate}%` : "—"} sub={`${stats.won}✓ · ${stats.lost}✗ · ${stats.pending} en juego`} />

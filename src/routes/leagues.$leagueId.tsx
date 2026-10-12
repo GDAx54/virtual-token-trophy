@@ -10,6 +10,8 @@ import { TabBar } from "@/components/TabBar";
 import { cn } from "@/lib/utils";
 import { PlayerStatsDialog } from "@/components/PlayerStatsDialog";
 import { achievementById } from "@/lib/achievements";
+import { DuelSection } from "@/components/DuelSection";
+import { RankBadge } from "@/components/RankBadge";
 
 export const Route = createFileRoute("/leagues/$leagueId")({
   head: () => ({
@@ -22,7 +24,7 @@ export const Route = createFileRoute("/leagues/$leagueId")({
 });
 
 interface LeagueData { id: string; name: string; invite_code: string; starting_bankroll: number }
-interface MemberRow { user_id: string; bankroll: number; username: string; display_name: string | null; title: string | null; featured_badges: string[] }
+interface MemberRow { user_id: string; bankroll: number; username: string; display_name: string | null; title: string | null; featured_badges: string[]; rank: number }
 
 function LeagueDetailPage() {
   const { leagueId } = Route.useParams();
@@ -77,6 +79,8 @@ function LeagueDetailPage() {
         ? await supabase.from("profiles").select("id, username, display_name, title, featured_badges").in("id", ids)
         : { data: [] as any[] };
       const pmap = new Map((profs ?? []).map((p: any) => [p.id, p]));
+      const { data: rks } = await supabase.from("league_ranks").select("user_id, rank").eq("league_id", leagueId);
+      const rmap = new Map((rks ?? []).map((r: any) => [r.user_id, r.rank as number]));
       setRows(mems.map((m: any) => {
         const p = pmap.get(m.user_id);
         return {
@@ -86,6 +90,7 @@ function LeagueDetailPage() {
           display_name: p?.display_name ?? null,
           title: p?.title ?? null,
           featured_badges: p?.featured_badges ?? [],
+          rank: rmap.get(m.user_id) ?? 0,
         };
       }));
     };
@@ -218,6 +223,10 @@ function LeagueDetailPage() {
           </div>
         )}
 
+        {league && user && (
+          <DuelSection leagueId={leagueId} leagueName={league.name} me={user.id} members={rows} />
+        )}
+
         <div className="mb-3 flex items-center gap-2">
           <Trophy className="h-5 w-5 text-neon" />
           <h2 className="text-sm uppercase tracking-widest">Clasificación</h2>
@@ -298,6 +307,7 @@ function LeagueDetailPage() {
                   <div className={cn("text-base font-bold tabular-nums", podium.amount)}>
                     {r.bankroll.toLocaleString()} €
                   </div>
+                  <RankBadge rank={r.rank} leagueName={league?.name} className="mt-0.5" />
                 </div>
               </button>
             );
@@ -341,6 +351,7 @@ function LeagueDetailPage() {
 
       <PlayerStatsDialog
         leagueId={leagueId}
+        leagueName={league?.name}
         player={selected !== null ? rows[selected] ?? null : null}
         rank={(selected ?? 0) + 1}
         totalPlayers={rows.length}

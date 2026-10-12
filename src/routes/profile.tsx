@@ -8,6 +8,8 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { AppHeader } from "@/components/AppHeader";
 import { TabBar } from "@/components/TabBar";
 import { AchievementsShowcase } from "@/components/AchievementsShowcase";
+import { RankBadge } from "@/components/RankBadge";
+import { useActiveLeague } from "@/hooks/use-active-league";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -27,6 +29,20 @@ function ProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [stats, setStats] = useState({ active: 0, won: 0, lost: 0 });
   const [referredCount, setReferredCount] = useState(0);
+  const { leagueId } = useActiveLeague();
+  const [leagueInfo, setLeagueInfo] = useState<{ name: string; bankroll: number; rank: number } | null>(null);
+
+  useEffect(() => {
+    if (!user || !leagueId) { setLeagueInfo(null); return; }
+    Promise.all([
+      supabase.from("leagues").select("name").eq("id", leagueId).maybeSingle(),
+      supabase.from("league_members").select("bankroll").eq("league_id", leagueId).eq("user_id", user.id).maybeSingle(),
+      supabase.from("league_ranks").select("rank").eq("league_id", leagueId).eq("user_id", user.id).maybeSingle(),
+    ]).then(([l, m, r]) => {
+      if (l.data && m.data) setLeagueInfo({ name: l.data.name, bankroll: Number(m.data.bankroll), rank: r.data?.rank ?? 0 });
+      else setLeagueInfo(null);
+    });
+  }, [user, leagueId]);
 
   useEffect(() => {
     if (!user) return;
@@ -90,7 +106,16 @@ function ProfilePage() {
           </div>
           <h1 className="mt-3 text-xl font-bold">{profile?.display_name || profile?.username || "—"}</h1>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">@{profile?.username}</p>
-          <p className="mt-3 text-xs text-muted-foreground">Tu saldo se gestiona por liga. Cámbiala desde la pestaña Ligas.</p>
+          {leagueInfo ? (
+            <div className="mt-3">
+              <div className="flex flex-wrap items-center justify-center gap-1.5 text-sm font-bold tabular-nums">
+                {leagueInfo.bankroll.toLocaleString()} € · <RankBadge rank={leagueInfo.rank} leagueName={leagueInfo.name} />
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">En la liga «{leagueInfo.name}». Cámbiala desde la pestaña Ligas.</p>
+            </div>
+          ) : (
+            <p className="mt-3 text-xs text-muted-foreground">Tu saldo se gestiona por liga. Cámbiala desde la pestaña Ligas.</p>
+          )}
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-3">
