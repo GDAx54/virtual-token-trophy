@@ -40,6 +40,7 @@ function BetsPage() {
   const { user } = useSession();
   const [bets, setBets] = useState<BetRow[]>([]);
   const [retos, setRetos] = useState<ChallengeActivity[]>([]);
+  const [tab, setTab] = useState<"bets" | "retos">("bets");
   useEffect(() => {
     if (!user) return;
     supabase.from("match_challenges")
@@ -72,7 +73,14 @@ function BetsPage() {
     <div className="min-h-screen pb-24">
       <AppHeader subtitle="Historial de apuestas" />
       <main className="mx-auto max-w-3xl px-5 pt-6">
-        {bets.length === 0 ? (
+        <div className="mb-4 grid grid-cols-2 gap-1 rounded-xl bg-card/60 p-1">
+          {([["bets", `Apuestas (${bets.length})`], ["retos", `Retos (${retos.length})`]] as const).map(([k, l]) => (
+            <button key={k} type="button" onClick={() => setTab(k)}
+              className={cn("rounded-lg py-2 text-xs font-bold uppercase tracking-wider transition-all",
+                tab === k ? "bg-neon text-neon-foreground" : "text-muted-foreground")}>{l}</button>
+          ))}
+        </div>
+        {tab === "bets" && (bets.length === 0 ? (
           <p className="rounded-xl border border-border bg-card/40 p-8 text-center text-sm text-muted-foreground">
             Aún no has hecho ninguna apuesta. Vuelve a "Inicio" y elige tu primer pick.
           </p>
@@ -80,10 +88,12 @@ function BetsPage() {
           <div className="space-y-3">
             {bets.map((b) => <BetRowCard key={b.id} bet={b} />)}
           </div>
+        ))}
+        {tab === "retos" && retos.length === 0 && (
+          <p className="rounded-xl border border-border bg-card/40 p-8 text-center text-sm text-muted-foreground">Aún no has hecho ningún reto.</p>
         )}
-        {retos.length > 0 && (
-          <section className="mt-8">
-            <h2 className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">Retos</h2>
+        {tab === "retos" && retos.length > 0 && (
+          <section>
             <div className="space-y-2">
               {retos.map((r) => {
                 const h = r.matches?.home_team.name ?? "Local", a = r.matches?.away_team.name ?? "Visitante";
