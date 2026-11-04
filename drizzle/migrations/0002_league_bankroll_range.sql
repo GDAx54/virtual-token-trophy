@@ -1,0 +1,1 @@
+ALTER TABLE public.leagues ADD CONSTRAINT leagues_starting_bankroll_range CHECK (starting_bankroll BETWEEN 10 AND 100000000) NOT VALID;

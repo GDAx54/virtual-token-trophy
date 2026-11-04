@@ -160,9 +160,10 @@ function CreateLeagueForm({ onDone }: { onDone: (id: string) => void }) {
   const [name, setName] = useState("");
   const [stake, setStake] = useState(10000);
   const [busy, setBusy] = useState(false);
+  const stakeOk = Number.isInteger(stake) && stake >= 10 && stake <= 100000000;
 
   const submit = async () => {
-    if (!user || !name.trim() || busy) return;
+    if (!user || !name.trim() || busy || !stakeOk) return;
     setBusy(true);
     const { data, error } = await supabase
       .from("leagues")
@@ -184,10 +185,12 @@ function CreateLeagueForm({ onDone }: { onDone: (id: string) => void }) {
       />
       <label className="mt-3 block text-[10px] uppercase tracking-widest text-muted-foreground">Saldo inicial por miembro (€)</label>
       <input
-        type="number" min={100} value={stake} onChange={(e) => setStake(Math.max(100, Number(e.target.value) || 0))}
-        className="mt-1 w-32 rounded-md border border-border bg-background/80 px-3 py-2 text-sm outline-none focus:border-neon"
+        type="number" min={10} max={100000000} step={1} inputMode="numeric" value={stake}
+        onChange={(e) => setStake(e.target.value === "" ? 0 : Math.floor(Number(e.target.value)))}
+        className="mt-1 w-40 rounded-md border border-border bg-background/80 px-3 py-2 text-sm outline-none focus:border-neon"
       />
-      <button onClick={submit} disabled={busy || !name.trim()}
+      <p className={`mt-1 text-[11px] ${stakeOk ? "text-muted-foreground" : "text-destructive"}`}>Número entero entre 10 y 100.000.000 €</p>
+      <button onClick={submit} disabled={busy || !name.trim() || !stakeOk}
         className="mt-3 w-full rounded-lg bg-neon px-3 py-2 text-sm font-bold text-neon-foreground shadow-[var(--shadow-glow)] disabled:opacity-50">
         {busy ? "Creando..." : "Crear liga"}
       </button>
