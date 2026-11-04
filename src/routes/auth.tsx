@@ -100,9 +100,6 @@ function AuthPage() {
           alt="90x"
           className="mx-auto h-20 w-auto rounded-3xl"
         />
-        <div className="mt-2 flex items-center justify-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
-          <Coins className="h-3 w-3 text-neon" /> 10.000 € al registrarte
-        </div>
       </Link>
 
       {refParam && (

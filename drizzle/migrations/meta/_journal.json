@@ -15,6 +15,13 @@
       "when": 1791731923326,
       "tag": "0001_weekly_duels",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793812670841,
+      "tag": "0002_league_bankroll_range",
+      "breakpoints": true
     }
   ]
 }
